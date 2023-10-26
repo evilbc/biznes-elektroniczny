@@ -3,5 +3,5 @@
   <component name="Black">
     <option name="sdkName" value="Python 3.11 (scraper)" />
   </component>
-  <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.11 (scraper)" project-jdk-type="Python SDK" />
+  <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.8.10 WSL (Ubuntu): (/home/pawel/.virtualenvs/scraper/bin/python) (2)" project-jdk-type="Python SDK" />
 </project>
