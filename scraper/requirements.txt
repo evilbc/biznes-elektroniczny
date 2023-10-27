@@ -1,2 +1,2 @@
 Scrapy~=2.11.0
-scrapy-playwright~=0.0.33
+beautifulsoup4~=4.12.2

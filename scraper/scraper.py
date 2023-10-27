@@ -1,120 +1,139 @@
 import os
+from dataclasses import dataclass
+from io import TextIOWrapper
 from pathlib import Path
 
 import scrapy
 from scrapy.crawler import CrawlerProcess
 from scrapy.http import HtmlResponse
-from scrapy.selector import SelectorList
+from scrapy.selector import SelectorList, Selector
+from bs4 import BeautifulSoup
+import json
+
+from itemadapter import ItemAdapter
+
 from scrapy.utils.reactor import install_reactor
+from typing import Set, Dict, Any
 
 
-class EmpikSpider(scrapy.Spider):
-	name = 'empik'
-	allowed_domains = ['empik.com']
+class ScrapeResult(scrapy.Item):
+	nazwa: str = scrapy.Field()
+	cena: float = scrapy.Field()
+	opis: str = scrapy.Field()
+	kategorie: [str] = scrapy.Field()
+
+
+def inner_text(selector: Selector) -> str:
+	html = selector.get()
+	soup = BeautifulSoup(html, 'html.parser')
+	return soup.get_text().strip()
+
+
+class KeezaSpider(scrapy.Spider):
+	name = 'keeza'
+	allowed_domains = ['sklep.keeza.pl']
 	start_urls = [
-		'https://www.empik.com/szukaj/produkt']
-	max_pages_per_subcategory = 2
-	max_products = 100
-	products = 0
-
-	def start_requests(self):
-		install_reactor('twisted.internet.asyncioreactor.AsyncioSelectorReactor')
-		for url in self.start_urls:
-			yield scrapy.Request(url, self.parse)
+		'https://sklep.keeza.pl/']
 
 	def parse(self, response: HtmlResponse):
+		# kategorie bez podkategorii
+		links: SelectorList = response.xpath(
+			'//nav[@class="innermenu row container relative"]/ul[@class="menu-list large standard"]/li['
+			'not(@class)]/h3/a')
 
-		categories: SelectorList = response.xpath(
-			'//div[@class="filters__group  filters__category js-category-facet ta-category-filters"]/ul/li/a')
+		# podkategorie bez kolejnego poziomu podkategorii
+		links += response.xpath(
+			'//nav[@class="innermenu row container relative"]/ul[@class="menu-list large standard"]/li['
+			'@class="parent"]/div[@class="submenu level1"]/ul[@class="level1"]/li[@class!="parent"]/h3/a')
 
+		# podkategorie podkategorii - ostatni poziom zagłębienia
+		links += response.xpath(
+			'//nav[@class="innermenu row container relative"]/ul[@class="menu-list large standard"]/li['
+			'@class="parent"]/div[@class="submenu level1"]/ul[@class="level1"]/li[@class="parent"]/div['
+			'@class="submenu '
+			'level2"]/ul[@class="level2"]/li/h3/a')
+
+		for link in links:
+			url = response.urljoin(link.attrib['href'])
+			yield scrapy.Request(url, self.parse_product_list)
+
+	def parse_product_list(self, response: HtmlResponse):
+		links: SelectorList = response.css('.product-inner-wrap').xpath('./a')
+		for link in links:
+			url = response.urljoin(link.attrib['href'])
+			yield scrapy.Request(url, self.parse_product)
+		current_page: SelectorList = response.xpath(
+			'//div[@class="innerbox"]//ul[@class="paginator"]/li[@class="selected"]')
+		if len(current_page) > 1:
+			self.logger.error(
+				f"Found {len(current_page)} possible pages")
+		elif len(current_page) == 1:
+			next_page: SelectorList = current_page[0].xpath('following-sibling::li[2]/a')
+			if len(next_page) > 1:
+				self.logger.error(
+					f"Found {len(next_page)} possible next pages")
+			elif len(next_page) == 1:
+				url = response.urljoin(next_page[0].attrib['href'])
+				yield scrapy.Request(url, self.parse_product_list)
+
+	def parse_product(self, response: HtmlResponse):
+		cena_str: str = response.css('.main-price').xpath('./text()').extract_first().strip()  # np. 79,99 zł
+		cena_str = (cena_str.split(u'\xa0')[0]).replace(",", ".")  # 79.99
+		cena: float = float(cena_str)
+		opis_selector: Selector = response.xpath('//div[@itemprop="description"]')[0]
+		opis: str = inner_text(opis_selector)
+		nazwa: str = response.xpath('//h1[@itemprop="name"]/text()').extract_first().strip()
+		kategorie: [str] = []
+		kategorie_selectors: SelectorList = response.xpath(
+			'//li[@itemprop="itemListElement"]/a[@href!="/"]/span[@itemprop="name"]/text()')
+		for kat in kategorie_selectors:
+			kategorie.append(kat.extract().strip())
+		yield ScrapeResult({ "cena": cena, "opis": opis, "nazwa": nazwa, "kategorie": kategorie })
+
+
+class JsonWriterPipeline:
+
+	def open_spider(self, spider: scrapy.Spider):
+		# result_directory: Path = Path('../scrape-result')
+		# result_directory.mkdir(exist_ok=True)  # jeśli folder nie istnieje, to go tworzy
+		# file: Path = result_directory / 'result.json'
+		# self.file: TextIOWrapper = open(file, "w", encoding="utf-8")
+		self.seen_products: Set[str] = set()
+		self.result_tree: Dict[str, Any] = { }
+
+	def close_spider(self, spider: scrapy.Spider):
 		result_directory: Path = Path('../scrape-result')
 		result_directory.mkdir(exist_ok=True)  # jeśli folder nie istnieje, to go tworzy
-		file: Path = result_directory / 'categories.txt'
-
+		file: Path = result_directory / 'result.json'
 		with open(file, "w", encoding="utf-8") as f:
-			for category in categories:
-				link: str = response.urljoin(category.attrib['href'])
-				title: str = category.xpath('text()').extract_first().strip()
-				f.write(f"{title}\n")
-				yield scrapy.Request(link, self.parse_category, cb_kwargs=dict(category_name=title))
+			json.dump(f, self.result_tree)
+		# self.file.close()
+		pass
 
-	def parse_category(self, response: HtmlResponse, category_name: str):
-		subcategories: SelectorList = response.xpath(
-			'//div[@class="filters__group  filters__category js-category-facet ta-category-filters"]/ul/li['
-			'@class="filter--active indent1 ta-active-filter ta-category"]/ul/li/a')
-		result_directory: Path = Path('../' + 'scrape-result')
-		file: Path = result_directory / f'{category_name}.txt'
-
-		with open(file, "w", encoding="utf-8") as f:
-			for subcategory in subcategories:
-				link: str = response.urljoin(subcategory.attrib['href'])
-				title: str = subcategory.xpath('text()').extract_first().strip()
-				f.write(f"{title}\n")
-				yield scrapy.Request(link, self.parse_subcategory,
-				                     cb_kwargs=dict(category_name=category_name, subcategory_name=title, page=1))
-
-	def parse_subcategory(self, response: HtmlResponse, category_name: str, subcategory_name: str, page: int):
-		if self.products >= self.max_products:
-			return
-		products: SelectorList = response.xpath(
-			'//div[@class="search-content js-search-content"]/div[@class="search-list-item  js-reco-product '
-			'js-energyclass-product ta-product-tile"]/div/a')
-		for product in products:
-			if self.products > self.max_products:
-				return
-			self.products += 1
-			link: str = response.urljoin(product.attrib['href'])
-			yield scrapy.Request(link, callback=self.parse_product,
-			                     cb_kwargs=dict(category_name=category_name, subcategory_name=subcategory_name),
-			                     meta={ "playwright": True })
-		if page >= self.max_pages_per_subcategory:
-			return
-		next_page_selector: SelectorList = response.xpath(
-			f'//div[@class="pagination"]/span[@class="mobile-hide"]/a[text()="\n{page + 1} "]')
-		if len(next_page_selector) > 1:
-			self.logger.error(
-				f"Found {len(next_page_selector)} possible pages for subcategory {subcategory_name} on page {page}")
-		elif len(next_page_selector) == 1:
-			yield scrapy.Request(response.urljoin(next_page_selector[0].attrib['href']), self.parse_subcategory,
-			                     cb_kwargs=dict(category_name=category_name, subcategory_name=subcategory_name,
-			                                    page=page + 1))
-
-	async def parse_product(self, response: HtmlResponse, category_name: str, subcategory_name: str):
-		try:
-			title: str = response.xpath('//h1[@data-ta="title"]/text()').extract_first()
-			cena_str: str = response.xpath(
-				'//div[@class="css-tgz8pg-container"]/div[@class="css-im6n0l-priceMainContainer"]/div['
-				'@class="css-0"]/span/text()').extract_first()  # w stylu 79,99 zł
-			cena_str = (cena_str.split(u'\xa0')[0]).replace(",", ".")  # 79.99
-			cena: float = float(cena_str)
-			detail_rows: SelectorList = response.xpath(
-				'//section[@data-ta-section="DetailedData"]/div/div/table/tbody/tr')
-
-			result_directory: Path = Path(f'../scrape-result/{category_name}/{subcategory_name}/{title}')
-			os.makedirs(result_directory, exist_ok=True)
-			file: Path = result_directory / 'properties.txt'
-
-			with open(file, "w", encoding="utf-8") as f:
-				f.write(f'cena; {cena}\n')
-				for row in detail_rows:
-					detail_name = row.xpath('th/text()').extract_first()
-					detail_value = row.xpath('td/div/text()').extract_first()
-					f.write(f'{detail_name}; {detail_value}\n')
-		except:
-			self.products -= 1
+	def process_item(self, item: ScrapeResult, spider: scrapy.Spider):
+		nazwa: str = item['nazwa']
+		if nazwa in self.seen_products:
+			return item
+		self.seen_products.add(nazwa)
+		tree_level = self.result_tree
+		for kategoria in item['kategorie']:
+			if kategoria not in tree_level:
+				tree_level[kategoria] = { }
+			tree_level = tree_level[kategoria]
+		if 'products' not in tree_level:
+			tree_level['products'] = []
+		tree_level['products'].append(item)
+		# line = json.dumps(ItemAdapter(item).asdict()) + "\n"
+		# self.file.write(line)
+		return item
 
 
 if __name__ == "__main__":
 	process: CrawlerProcess = CrawlerProcess(settings={
-		"DOWNLOAD_HANDLERS": {
-			"http": "scrapy_playwright.handler.ScrapyPlaywrightDownloadHandler",
-			"https": "scrapy_playwright.handler.ScrapyPlaywrightDownloadHandler",
+		'ITEM_PIPELINES': {
+			'scraper.JsonWriterPipeline': 1,
 		},
-		"TWISTED_REACTOR": "twisted.internet.asyncioreactor.AsyncioSelectorReactor",
-		"PLAYWRIGHT_LAUNCH_OPTIONS": {
-			"headless": True,
-			"timeout": 10 * 1000,  # 10 seconds
-		}
+		'LOG_LEVEL': 'INFO',
 	})
-	process.crawl(EmpikSpider)
+	process.crawl(KeezaSpider)
 	process.start()
