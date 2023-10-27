@@ -1,19 +1,13 @@
-import os
-from dataclasses import dataclass
-from io import TextIOWrapper
+import json
 from pathlib import Path
+from typing import Set, Dict, Any
 
 import scrapy
+from bs4 import BeautifulSoup
+from itemadapter import ItemAdapter
 from scrapy.crawler import CrawlerProcess
 from scrapy.http import HtmlResponse
 from scrapy.selector import SelectorList, Selector
-from bs4 import BeautifulSoup
-import json
-
-from itemadapter import ItemAdapter
-
-from scrapy.utils.reactor import install_reactor
-from typing import Set, Dict, Any
 
 
 class ScrapeResult(scrapy.Item):
@@ -24,6 +18,10 @@ class ScrapeResult(scrapy.Item):
 
 
 def inner_text(selector: Selector) -> str:
+	"""
+	wyciąga lepiej sformatowany text z uwzględnieniem tagów html
+	np. <div>test1</div><p>test2</p> -> test1\ntest2
+	"""
 	html = selector.get()
 	soup = BeautifulSoup(html, 'html.parser')
 	return soup.get_text().strip()
@@ -68,7 +66,7 @@ class KeezaSpider(scrapy.Spider):
 			self.logger.error(
 				f"Found {len(current_page)} possible pages")
 		elif len(current_page) == 1:
-			next_page: SelectorList = current_page[0].xpath('following-sibling::li[2]/a')
+			next_page: SelectorList = current_page[0].xpath('following-sibling::li[2]/a')  # drugi li po obecnym
 			if len(next_page) > 1:
 				self.logger.error(
 					f"Found {len(next_page)} possible next pages")
@@ -94,29 +92,26 @@ class KeezaSpider(scrapy.Spider):
 class JsonWriterPipeline:
 
 	def open_spider(self, spider: scrapy.Spider):
-		# result_directory: Path = Path('../scrape-result')
-		# result_directory.mkdir(exist_ok=True)  # jeśli folder nie istnieje, to go tworzy
-		# file: Path = result_directory / 'result.json'
-		# self.file: TextIOWrapper = open(file, "w", encoding="utf-8")
 		self.seen_products: Set[str] = set()
 		self.result_tree: Dict[str, Any] = { }
 
 	def close_spider(self, spider: scrapy.Spider):
 		result_directory: Path = Path('../scrape-result')
-		result_directory.mkdir(exist_ok=True)  # jeśli folder nie istnieje, to go tworzy
+		result_directory.mkdir(exist_ok=True)  # jeśli folder nie istnieje, to go tworzy, jak istnieje to ok
 		file: Path = result_directory / 'result.json'
 		with open(file, "w", encoding="utf-8") as f:
-			json_data = json.dumps(self.result_tree)
+			json_data: str = json.dumps(self.result_tree, ensure_ascii=False, indent=4, sort_keys=True)
 			f.write(json_data)
-		# self.file.close()
-		pass
 
 	def process_item(self, item: ScrapeResult, spider: scrapy.Spider):
 		nazwa: str = item['nazwa']
+		# produkty mogą się tu powtarzać, bo np. jest na stronie "Promocje" i na stronie konkretnej kategorii
 		if nazwa in self.seen_products:
 			return item
 		self.seen_products.add(nazwa)
 		tree_level = self.result_tree
+		# tworzy strukturę, że na pierwszym poziomie są główne kategorie, potem ich podkategorie i w podkategoriach
+		# jest pole products będące listę
 		for kategoria in item['kategorie']:
 			if kategoria not in tree_level:
 				tree_level[kategoria] = { }
@@ -124,8 +119,6 @@ class JsonWriterPipeline:
 		if 'products' not in tree_level:
 			tree_level['products'] = []
 		tree_level['products'].append(ItemAdapter(item).asdict())
-		# line = json.dumps(ItemAdapter(item).asdict()) + "\n"
-		# self.file.write(line)
 		return item
 
 
