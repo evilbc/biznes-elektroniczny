@@ -106,7 +106,8 @@ class JsonWriterPipeline:
 		result_directory.mkdir(exist_ok=True)  # jeśli folder nie istnieje, to go tworzy
 		file: Path = result_directory / 'result.json'
 		with open(file, "w", encoding="utf-8") as f:
-			json.dump(f, self.result_tree)
+			json_data = json.dumps(self.result_tree)
+			f.write(json_data)
 		# self.file.close()
 		pass
 
@@ -122,7 +123,7 @@ class JsonWriterPipeline:
 			tree_level = tree_level[kategoria]
 		if 'products' not in tree_level:
 			tree_level['products'] = []
-		tree_level['products'].append(item)
+		tree_level['products'].append(ItemAdapter(item).asdict())
 		# line = json.dumps(ItemAdapter(item).asdict()) + "\n"
 		# self.file.write(line)
 		return item
