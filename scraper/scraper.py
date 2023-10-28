@@ -1,8 +1,8 @@
+import bisect
 import json
 from pathlib import Path
-from typing import Set, Dict, Any
+from typing import Dict, Any
 
-import bisect
 import scrapy
 from bs4 import BeautifulSoup
 from itemadapter import ItemAdapter
@@ -17,6 +17,8 @@ class ScrapeResult(scrapy.Item):
 	opis: str = scrapy.Field()
 	kategorie: [str] = scrapy.Field()
 
+	image_urls: [str] = scrapy.Field()
+	images = scrapy.Field()
 
 
 def get_nazwa_opis(item: ScrapeResult) -> str:
@@ -94,7 +96,12 @@ class KeezaSpider(scrapy.Spider):
 			'//li[@itemprop="itemListElement"]/a[@href!="/"]/span[@itemprop="name"]/text()')
 		for kat in kategorie_selectors:
 			kategorie.append(kat.extract().strip())
-		yield ScrapeResult({ "cena": cena, "opis": opis, "nazwa": nazwa, "kategorie": kategorie })
+		image_urls: [str] = []
+		images_selectors: SelectorList = response.css('.innersmallgallery').xpath('./ul/li/a')
+		for img in images_selectors:
+			image_urls.append(response.urljoin(img.attrib['href']))
+		yield ScrapeResult(
+			{ 'cena': cena, 'opis': opis, 'nazwa': nazwa, 'kategorie': kategorie, 'image_urls': image_urls })
 
 
 class JsonWriterPipeline:
@@ -122,6 +129,7 @@ class JsonWriterPipeline:
 			tree_level['products'] = []
 		product_list: [dict] = tree_level['products']
 		product_to_insert: dict = ItemAdapter(item).asdict()
+		product_to_insert['images'] = ['img/' + img['path'] for img in product_to_insert['images']]
 		# dodaje produkty alfabetycznie najpierw według nazwy, potem według opisu
 		index = bisect.bisect_left(product_list, get_nazwa_opis(product_to_insert), key=get_nazwa_opis)
 		product_list.insert(index, product_to_insert)
@@ -129,11 +137,16 @@ class JsonWriterPipeline:
 
 
 if __name__ == "__main__":
+	result_directory: Path = Path('../scrape-result/img')
+	result_directory.mkdir(exist_ok=True)
+
 	process: CrawlerProcess = CrawlerProcess(settings={
 		'ITEM_PIPELINES': {
-			'scraper.JsonWriterPipeline': 1,
+			'scrapy.pipelines.images.ImagesPipeline': 1,
+			'scraper.JsonWriterPipeline': 2,
 		},
 		'LOG_LEVEL': 'INFO',
+		'IMAGES_STORE': result_directory
 	})
 	process.crawl(KeezaSpider)
 	process.start()
