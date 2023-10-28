@@ -2,6 +2,7 @@ import json
 from pathlib import Path
 from typing import Set, Dict, Any
 
+import bisect
 import scrapy
 from bs4 import BeautifulSoup
 from itemadapter import ItemAdapter
@@ -15,6 +16,11 @@ class ScrapeResult(scrapy.Item):
 	cena: float = scrapy.Field()
 	opis: str = scrapy.Field()
 	kategorie: [str] = scrapy.Field()
+
+
+
+def get_nazwa_opis(item: ScrapeResult) -> str:
+	return item['nazwa'] + item['opis']
 
 
 def inner_text(selector: Selector) -> str:
@@ -66,7 +72,9 @@ class KeezaSpider(scrapy.Spider):
 			self.logger.error(
 				f"Found {len(current_page)} possible pages")
 		elif len(current_page) == 1:
-			next_page: SelectorList = current_page[0].xpath('following-sibling::li[2]/a')  # drugi li po obecnym
+			next_page: SelectorList = current_page[0].xpath(
+				'following-sibling::li[2]/a')  # drugi li po obecnym; pierwszy li nie ma linku i jest tylko dodany w
+			# html żeby lepiej wyglądało
 			if len(next_page) > 1:
 				self.logger.error(
 					f"Found {len(next_page)} possible next pages")
@@ -92,7 +100,6 @@ class KeezaSpider(scrapy.Spider):
 class JsonWriterPipeline:
 
 	def open_spider(self, spider: scrapy.Spider):
-		self.seen_products: Set[str] = set()
 		self.result_tree: Dict[str, Any] = { }
 
 	def close_spider(self, spider: scrapy.Spider):
@@ -104,11 +111,6 @@ class JsonWriterPipeline:
 			f.write(json_data)
 
 	def process_item(self, item: ScrapeResult, spider: scrapy.Spider):
-		nazwa: str = item['nazwa']
-		# produkty mogą się tu powtarzać, bo np. jest na stronie "Promocje" i na stronie konkretnej kategorii
-		if nazwa in self.seen_products:
-			return item
-		self.seen_products.add(nazwa)
 		tree_level = self.result_tree
 		# tworzy strukturę, że na pierwszym poziomie są główne kategorie, potem ich podkategorie i w podkategoriach
 		# jest pole products będące listę
@@ -118,7 +120,11 @@ class JsonWriterPipeline:
 			tree_level = tree_level[kategoria]
 		if 'products' not in tree_level:
 			tree_level['products'] = []
-		tree_level['products'].append(ItemAdapter(item).asdict())
+		product_list: [dict] = tree_level['products']
+		product_to_insert: dict = ItemAdapter(item).asdict()
+		# dodaje produkty alfabetycznie najpierw według nazwy, potem według opisu
+		index = bisect.bisect_left(product_list, get_nazwa_opis(product_to_insert), key=get_nazwa_opis)
+		product_list.insert(index, product_to_insert)
 		return item
 
 
