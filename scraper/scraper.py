@@ -30,15 +30,15 @@ def inner_text(selector: Selector) -> str:
 	wyciąga lepiej sformatowany text z uwzględnieniem tagów html
 	np. <div>test1</div><p>test2</p> -> test1\ntest2
 	"""
-	html = selector.get()
-	soup = BeautifulSoup(html, 'html.parser')
+	html: str = selector.get()
+	soup: BeautifulSoup = BeautifulSoup(html, 'html.parser')
 	return soup.get_text().strip()
 
 
 class KeezaSpider(scrapy.Spider):
-	name = 'keeza'
-	allowed_domains = ['sklep.keeza.pl']
-	start_urls = [
+	name: str = 'keeza'
+	allowed_domains: [str] = ['sklep.keeza.pl']
+	start_urls: [str] = [
 		'https://sklep.keeza.pl/']
 
 	def parse(self, response: HtmlResponse):
@@ -60,13 +60,13 @@ class KeezaSpider(scrapy.Spider):
 			'level2"]/ul[@class="level2"]/li/h3/a')
 
 		for link in links:
-			url = response.urljoin(link.attrib['href'])
+			url: str = response.urljoin(link.attrib['href'])
 			yield scrapy.Request(url, self.parse_product_list)
 
 	def parse_product_list(self, response: HtmlResponse):
 		links: SelectorList = response.css('.product-inner-wrap').xpath('./a')
 		for link in links:
-			url = response.urljoin(link.attrib['href'])
+			url: str = response.urljoin(link.attrib['href'])
 			yield scrapy.Request(url, self.parse_product)
 		current_page: SelectorList = response.xpath(
 			'//div[@class="innerbox"]//ul[@class="paginator"]/li[@class="selected"]')
@@ -118,7 +118,7 @@ class JsonWriterPipeline:
 			f.write(json_data)
 
 	def process_item(self, item: ScrapeResult, spider: scrapy.Spider):
-		tree_level = self.result_tree
+		tree_level: Dict[str, Any] = self.result_tree
 		# tworzy strukturę, że na pierwszym poziomie są główne kategorie, potem ich podkategorie i w podkategoriach
 		# jest pole products będące listę
 		for kategoria in item['kategorie']:
