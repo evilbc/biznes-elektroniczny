@@ -1,0 +1,50 @@
+version: '3'
+services:
+  db:
+    image: mariadb:10.10
+    restart: always
+    environment:
+      MARIADB_ROOT_PASSWORD: admin
+      MARIADB_DATABASE: presta
+      MARIADB_ROOT_HOST: '%'
+      MARIADB_USER: user
+      MARIADB_PASSWORD: admin
+    networks:
+      - presta_network
+    volumes:
+      - dbdata:/var/lib/mysql
+
+  prestashop:
+    image: niesytomichal/pg-weti-biznes-elektroniczny:latest
+    restart: always
+    depends_on:
+      - db
+    ports:
+      - 8080:80
+    environment:
+      PS_INSTALL_AUTO: 1
+      DB_SERVER: db
+      DB_NAME: presta
+      DB_USER: user
+      DB_PASSWD: admin
+      PS_DOMAIN: "${DOMAIN}"
+      PS_LANGUAGE: pl
+      PS_COUNTRY: PL
+      ADMIN_MAIL: "${ADMIN_MAIL}"
+      ADMIN_PASSWD: "${ADMIN_PASSWORD}"
+    networks:
+      - presta_network
+    volumes:
+      # - type: bind
+        # source: ./modules/testModule # local path to the module
+        # target: /var/www/html/modules/testModule # path to be mounted in the container
+      # - type: bind
+        # source: ./themes/myTheme # local path to the theme
+        # target:  /var/www/html/themes/myTheme # path to be mounted in the container
+      - psdata:/var/www/html
+
+networks:
+  presta_network:
+volumes:
+  psdata:
+  dbdata:
