@@ -20,7 +20,8 @@ services:
     depends_on:
       - db
     ports:
-      - 8080:80
+      - 80:80 # HTTP do przekierowania na HTTPS
+      - 443:443 # HTTPS
     environment:
       PS_INSTALL_AUTO: 1
       DB_SERVER: db
@@ -32,6 +33,7 @@ services:
       PS_COUNTRY: PL
       ADMIN_MAIL: "${ADMIN_MAIL}"
       ADMIN_PASSWD: "${ADMIN_PASSWORD}"
+      BIZ_DB_USE_DUMP: "${BIZ_DB_USE_DUMP}"
     networks:
       - presta_network
     volumes:

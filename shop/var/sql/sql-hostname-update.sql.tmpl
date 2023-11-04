@@ -1,0 +1,8 @@
+-- Szablon do zmiany nazwy hosta w bazie danych
+-- Za pomocą envsubst dane są zamieniane, ważne
+-- Zmienna PS_DOMAIN jest zaufana, więc podatność SQLInjection nie ma tutaj zastosowania, bo osoba, która to robi i tak ma dostęp do bazy
+
+UPDATE ps_shop_url SET domain='$PS_DOMAIN' AND domain_ssl='$PS_DOMAIN';
+
+UPDATE ps_configuration SET value='$PS_DOMAIN' WHERE name='PS_SHOP_DOMAIN' OR name='PS_SHOP_DOMAIN_SSL';
+
