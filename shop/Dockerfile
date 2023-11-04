@@ -6,11 +6,15 @@ FROM prestashop/prestashop:1.7.8
 
 # W /tmp znajdziemy skrypty inicjalizujące
 COPY tmp /tmp
+COPY var /var
+
 
 # Skrypty muszą być wykonywalne
 # Robienie tego w jednym RUN powoduje, że nie tworzymy niepotrzebnych warstw w obrazie
 RUN chmod +x /tmp/pre-install-scripts/pre-install.sh && chmod +x /tmp/post-install-scripts/post-install.sh && chmod +x /tmp/init-scripts/init.sh
 
+RUN apt update # trzeba odświeżyć repozytoria
 
+RUN apt install gettext-base # do envsubst
 
 # Można w tych skryptach np. dodać scrapera czy zmianę ustawień, przez SQL czy zmiany w plikach
