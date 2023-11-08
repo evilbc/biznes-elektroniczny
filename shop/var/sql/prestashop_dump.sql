@@ -3408,7 +3408,7 @@ CREATE TABLE `ps_configuration` (
   KEY `name` (`name`),
   KEY `id_shop` (`id_shop`),
   KEY `id_shop_group` (`id_shop_group`)
-) ENGINE=InnoDB AUTO_INCREMENT=425 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=426 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -3833,6 +3833,7 @@ INSERT INTO `ps_configuration` VALUES
 (422,NULL,NULL,'PS_LAYERED_FILTER_SHOW_OUT_OF_STOCK_LAST','0','2023-11-04 17:17:33','2023-11-04 17:17:33'),
 (423,NULL,NULL,'PS_LAYERED_FILTER_BY_DEFAULT_CATEGORY','0','2023-11-04 17:17:33','2023-11-04 17:17:33'),
 (424,NULL,NULL,'PS_LAYERED_INDEXED','1','2023-11-04 17:17:33','2023-11-04 17:17:33');
+(425,NULL,NULL,'PS_WEBSERVICE','1','2023-11-07 18:16:54','2023-11-07 18:16:55');
 /*!40000 ALTER TABLE `ps_configuration` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -15832,7 +15833,7 @@ CREATE TABLE `ps_webservice_account` (
   `active` tinyint(2) NOT NULL,
   PRIMARY KEY (`id_webservice_account`),
   KEY `key` (`key`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -15841,6 +15842,8 @@ CREATE TABLE `ps_webservice_account` (
 
 LOCK TABLES `ps_webservice_account` WRITE;
 /*!40000 ALTER TABLE `ps_webservice_account` DISABLE KEYS */;
+INSERT INTO `ps_webservice_account` VALUES
+(1,'I22J8MNFYTXPHNFW5FAQAV5SMYL9L4KG','','WebserviceRequest',0,NULL,1);
 /*!40000 ALTER TABLE `ps_webservice_account` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -15865,6 +15868,8 @@ CREATE TABLE `ps_webservice_account_shop` (
 
 LOCK TABLES `ps_webservice_account_shop` WRITE;
 /*!40000 ALTER TABLE `ps_webservice_account_shop` DISABLE KEYS */;
+INSERT INTO `ps_webservice_account_shop` VALUES
+(1,1);
 /*!40000 ALTER TABLE `ps_webservice_account_shop` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -16054,4 +16059,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-11-04 16:19:58
+-- Dump completed on 2023-11-07 17:21:51
