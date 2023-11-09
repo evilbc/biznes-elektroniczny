@@ -2,11 +2,13 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace ProductInit
@@ -19,14 +21,14 @@ namespace ProductInit
         private readonly StockAvailableFactory stockAvailableFactory;
         private readonly ImageFactory imageFactory;
         private readonly Random random;
-
+        private readonly List<Task> tasks;
 
 
         public Initializer()
         {
             // url do zmiany na taki, jaki się podało w .env
-            string baseUrl = "https://192.168.68.57/api";
-            string account = "I22J8MNFYTXPHNFW5FAQAV5SMYL9L4KG";
+            string baseUrl = "https://localhost/api";
+            string account = "NM5MUI12C95VICSZW2ELLTFWUYIXM11U";
             string password = "";
 
             // https://stackoverflow.com/questions/12553277/allowing-untrusted-ssl-certificates-with-httpclient
@@ -39,15 +41,17 @@ namespace ProductInit
             imageFactory = new ImageFactory(baseUrl, account, password);
 
             random = new Random();
+            tasks = new List<Task>();
         }
 
         public void Run()
         {
             IDictionary<string, JToken> data = JObject.Parse(File.ReadAllText(Path.Combine(SCRAPE_RESULT_PATH, "result.json")));
-            Parse(data);
+            Parse(data, new long[] { 2 });
+            tasks.ForEach(t => t.Wait());
         }
 
-        private void Parse(IDictionary<string, JToken> data, long? parentCategoryId = null)
+        private void Parse(IDictionary<string, JToken> data, long[] parentCategoryIds)
         {
             foreach (KeyValuePair<string, JToken> element in data)
             {
@@ -56,11 +60,13 @@ namespace ProductInit
                     Bukimedia.PrestaSharp.Entities.category category = new Bukimedia.PrestaSharp.Entities.category();
                     category.active = 1;
                     category.name.Add(PrestaString(element.Key));
-                    category.id_parent = parentCategoryId.GetValueOrDefault(1);
+                    category.id_parent = parentCategoryIds[0];
                     category.link_rewrite.Add(LinkRewrite(element.Key));
+                    category.is_root_category = 0;
+                    category.id_shop_default = 1;
                     category = categoryFactory.Add(category);
 
-                    Parse(element.Value as JObject, category.id);
+                    Parse(element.Value as JObject, parentCategoryIds.Prepend(category.id.Value).ToArray());
                 }
                 else if (element.Value is JArray)
                 {
@@ -72,28 +78,34 @@ namespace ProductInit
                         product.available_for_order = 1;
                         product.id_tax_rules_group = 1;
                         product.show_price = 1;
+                        product.type = "simple";
+                        product.visibility = "both";
                         product.name.Add(PrestaString(item.GetValue("nazwa")));
+                        product.minimal_quantity = 1;
                         product.description.Add(PrestaString(item.GetValue("opis")));
                         decimal cenaBrutto = (decimal) item.GetValue("cena");
-                        product.price = cenaBrutto / 1.23M; // tu musi być cena przed podatkiem
-                        product.id_category_default = parentCategoryId;
+                        product.price = decimal.Round(cenaBrutto / 1.23M, 6); // tu musi być cena przed podatkiem, podatek musi być zadeklarowany oddzielnie
+                        product.id_category_default = parentCategoryIds[0];
                         product.id_shop_default = 1;
-                        product.associations.categories.Add(new Bukimedia.PrestaSharp.Entities.AuxEntities.category(parentCategoryId.Value));
+                        foreach (long id in parentCategoryIds)
+                        {
+                            product.associations.categories.Add(new Bukimedia.PrestaSharp.Entities.AuxEntities.category(id));
+                        }
                         product = productFactory.Add(product);
                         foreach (string imagePath in item.GetValue("images"))
                         {
-                            imageFactory.AddProductImage(product.id.Value, Path.Combine(SCRAPE_RESULT_PATH, imagePath));
+                            tasks.Add(imageFactory.AddProductImageAsync(product.id.Value, Path.Combine(SCRAPE_RESULT_PATH, imagePath)));
                         }
 
                         product = productFactory.Get(product.id.Value);
-                        foreach(var association in product.associations.stock_availables)
+                        foreach (var association in product.associations.stock_availables)
                         {
                             Bukimedia.PrestaSharp.Entities.stock_available stock = stockAvailableFactory.Get(association.id);
                             //Część produktów ma być niedostępna.Stany magazynowe proszę ustawić tak, aby liczba dostępnych
                             //produktów każdego rodzaju nie przekraczała 10 szt.
                             stock.quantity = random.Next(10);
-                            stock.out_of_stock = stock.quantity == 0 ? 1 : 0;
-                            stockAvailableFactory.Update(stock);
+                            stock.out_of_stock = 1;
+                            tasks.Add(stockAvailableFactory.UpdateAsync(stock));
                         }
                     }
                 }
