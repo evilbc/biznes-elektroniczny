@@ -21,11 +21,11 @@ docker compose build && docker compose create && docker compose start
 docker restart shop-prestashop-1
 ```
 
-### Zbudowanie nowego obrazu kontenera sklepu
+### Zbudowanie nowego obrazu kontenera sklepu, przy odpalaniu uważać na zakończenia linii w plikach pre-install.sh itp. - powinny być Unixowe, ale git może pobrać jako Windowsowe
 
 ```bash
 # latest to tag, ale można równie dobrze wpisać v1 albo 1, etc.
-docker build -t niesytomichal/pg-weti-biznes-elektroniczny:latest
+docker build -t niesytomichal/pg-weti-biznes-elektroniczny:latest .
 ```
 
 Każdy może zbudować i mieć lokalny build. Do opcji push proszę o kontakt ze mną i wtedy dam uprawnienia tak aby robić push.
