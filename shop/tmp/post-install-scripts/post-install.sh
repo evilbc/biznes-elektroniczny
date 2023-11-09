@@ -23,9 +23,9 @@ mysql -u$DB_USER -p$DB_PASSWD -h $DB_SERVER $DB_NAME < $SQL_SCRIPT_FILE
 
 if [ "$BIZ_USE_DUMP" -eq "1" ] ; then
 	echo 'Naprawa danych związanych z hostem w bazie danych'
-	envsubst '$PS_DOMAIN' < /var/ssl/sql-hostname-update.sql.tmpl > /var/ssl/sql-hostname-update.sql
+	envsubst '$PS_DOMAIN' < /var/ssl/sql-hostname-update.sql.tmpl > /var/sql/sql-hostname-update.sql
 	# Po substytucji zmiennych środowiskowych wykonujemy to na serwerze
-	mysql -u$DB_USER -p$DB_PASSWD -h $DB_SERVER $DB_NAME < /var/ssl/sql-hostname-update.sql
+	mysql -u$DB_USER -p$DB_PASSWD -h $DB_SERVER $DB_NAME < /var/sql/sql-hostname-update.sql
 fi
 
 echo 'Czyszczenie bazy zakończone'
