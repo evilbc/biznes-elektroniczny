@@ -21,8 +21,6 @@ namespace ProductInit
         private readonly StockAvailableFactory stockAvailableFactory;
         private readonly ImageFactory imageFactory;
         private readonly Random random;
-        private readonly List<Task> tasks;
-
 
         public Initializer()
         {
@@ -41,14 +39,12 @@ namespace ProductInit
             imageFactory = new ImageFactory(baseUrl, account, password);
 
             random = new Random();
-            tasks = new List<Task>();
         }
 
         public void Run()
         {
             IDictionary<string, JToken> data = JObject.Parse(File.ReadAllText(Path.Combine(SCRAPE_RESULT_PATH, "result.json")));
             Parse(data, new long[] { 2 });
-            tasks.ForEach(t => t.Wait());
         }
 
         private void Parse(IDictionary<string, JToken> data, long[] parentCategoryIds)
@@ -94,7 +90,14 @@ namespace ProductInit
                         product = productFactory.Add(product);
                         foreach (string imagePath in item.GetValue("images"))
                         {
-                            tasks.Add(imageFactory.AddProductImageAsync(product.id.Value, Path.Combine(SCRAPE_RESULT_PATH, imagePath)));
+                            try
+                            {
+                                imageFactory.AddProductImage(product.id.Value, Path.Combine(SCRAPE_RESULT_PATH, imagePath));
+                            }
+                            catch (Exception e)
+                            {
+                                Console.Error.WriteLine(e);
+                            }
                         }
 
                         product = productFactory.Get(product.id.Value);
@@ -105,7 +108,7 @@ namespace ProductInit
                             //produktów każdego rodzaju nie przekraczała 10 szt.
                             stock.quantity = random.Next(10);
                             stock.out_of_stock = 1;
-                            tasks.Add(stockAvailableFactory.UpdateAsync(stock));
+                            stockAvailableFactory.Update(stock);
                         }
                     }
                 }
