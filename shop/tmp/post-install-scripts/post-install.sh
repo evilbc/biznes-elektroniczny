@@ -12,7 +12,7 @@ echo 'Czyszczenie bazy danych'
 SQL_SCRIPT_FILE="/var/sql/post-install.sql"
 
 
-if [ "$BIZ_USE_DUMP" -eq "1" ] ; then
+if [ "$BIZ_DB_USE_DUMP" -eq "1" ] ; then
 	echo 'Wykorzystywanie dumpa bazy danych'
 	SQL_SCRIPT_FILE="/var/sql/prestashop_dump.sql"
 else
@@ -21,11 +21,13 @@ fi
 
 mysql -u$DB_USER -p$DB_PASSWD -h $DB_SERVER $DB_NAME < $SQL_SCRIPT_FILE
 
-if [ "$BIZ_USE_DUMP" -eq "1" ] ; then
+if [ "$BIZ_DB_USE_DUMP" -eq "1" ] ; then
 	echo 'Naprawa danych związanych z hostem w bazie danych'
 	envsubst '$PS_DOMAIN' < /var/sql/sql-hostname-update.sql.tmpl > /var/sql/sql-hostname-update.sql
 	# Po substytucji zmiennych środowiskowych wykonujemy to na serwerze
 	mysql -u$DB_USER -p$DB_PASSWD -h $DB_SERVER $DB_NAME < /var/sql/sql-hostname-update.sql
+	# Odtworzenie zdjęć
+	unzip -q -o -u /tmp/img.zip -d /var/www/html/
 fi
 
 echo 'Czyszczenie bazy zakończone'

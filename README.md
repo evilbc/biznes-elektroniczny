@@ -21,7 +21,7 @@ docker compose build && docker compose create && docker compose start
 docker restart shop-prestashop-1
 ```
 
-### Zbudowanie nowego obrazu kontenera sklepu, przy odpalaniu uważać na zakończenia linii w plikach pre-install.sh itp. - powinny być Unixowe, ale git może pobrać jako Windowsowe
+### Zbudowanie nowego obrazu kontenera sklepu, przy odpalaniu uważać na zakończenia linii w plikach pre-install.sh itp.
 
 ```bash
 # latest to tag, ale można równie dobrze wpisać v1 albo 1, etc.
@@ -66,6 +66,7 @@ SHOW TABLES;
 
 ```bash
 # Plik dump.sql można zamienić na inną lokalizację, dostaniemy ten plik lokalnie a nie w kontenerze
+# Jeśli chce się zapisać również zdjęcia, należy zzipować katalog shop/img/ i plik zip umieścić w shop/tmp/
 docker exec shop-db-1 /bin/mysqldump -padmin presta > dump.sql
 ```
 
@@ -77,3 +78,5 @@ docker exec shop-db-1 /bin/mysqldump -padmin presta > dump.sql
 docker exec shop-db-1 /bin/mysqldump -padmin presta ps_table > dump.sql
 ```
 
+### Inicjalizacja produktów
+Należy najpierw odpalić scrapera (scraper/scraper.py, można uruchomić np. w PyCharmie), żeby pobrały się zdjęcia produktów. Następnie należy otworzyć product-init/ProductInit.sln w VisualStudio i uruchomić Initializer.cs

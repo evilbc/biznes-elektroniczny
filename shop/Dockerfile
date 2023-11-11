@@ -16,6 +16,7 @@ RUN apt update # trzeba odświeżyć repozytoria
 
 RUN apt install gettext-base # do envsubst
 RUN apt install -y dos2unix 
+RUN apt install -y unzip # do odtworzenia zdjęć produktów
 
 # Poniżej kod wykona konwersję dla wszystkich plików w katalogach (typ pliku to zwykły plik) i każdy plik pójdzie do konwersji
 RUN find /tmp/init-scripts /tmp/post-install-scripts /tmp/pre-install-scripts -type f | xargs dos2unix 
