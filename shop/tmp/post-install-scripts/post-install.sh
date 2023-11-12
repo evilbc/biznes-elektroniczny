@@ -1,7 +1,5 @@
 #!/bin/sh
 
-
-
 echo 'Czyszczenie bazy danych'
 
 # Czyścimy bazę danych do stanu z dumpa, alternatywnie można użyć post-install.sql w tym samym katalogu
