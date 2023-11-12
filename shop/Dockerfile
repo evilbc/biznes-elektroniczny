@@ -14,9 +14,8 @@ RUN chmod +x /tmp/pre-install-scripts/pre-install.sh && chmod +x /tmp/post-insta
 
 RUN apt update # trzeba odświeżyć repozytoria
 
-RUN apt install gettext-base # do envsubst
-RUN apt install -y dos2unix 
-RUN apt install -y unzip # do odtworzenia zdjęć produktów
+# gettext-base do envsubst, dos2unix do zmiany CRLF na LF, unzip do odtworzenia zdjęć produktów
+RUN apt install -y gettext-base dos2unix unzip
 
 # Poniżej kod wykona konwersję dla wszystkich plików w katalogach (typ pliku to zwykły plik) i każdy plik pójdzie do konwersji
 RUN find /tmp/init-scripts /tmp/post-install-scripts /tmp/pre-install-scripts -type f | xargs dos2unix 

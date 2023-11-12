@@ -21,7 +21,7 @@ docker compose build && docker compose create && docker compose start
 docker restart shop-prestashop-1
 ```
 
-### Zbudowanie nowego obrazu kontenera sklepu, przy odpalaniu uważać na zakończenia linii w plikach pre-install.sh itp.
+### Zbudowanie nowego obrazu kontenera sklepu
 
 ```bash
 # latest to tag, ale można równie dobrze wpisać v1 albo 1, etc.
@@ -79,4 +79,4 @@ docker exec shop-db-1 /bin/mysqldump -padmin presta ps_table > dump.sql
 ```
 
 ### Inicjalizacja produktów
-Należy najpierw odpalić scrapera (scraper/scraper.py, można uruchomić np. w PyCharmie), żeby pobrały się zdjęcia produktów. Następnie należy otworzyć product-init/ProductInit.sln w VisualStudio i uruchomić Initializer.cs
+Należy najpierw odpalić scrapera (scraper/scraper.py, można uruchomić np. w PyCharmie), żeby pobrały się zdjęcia produktów. Wymagane zależności są podane w requirements.txt (najlepiej w wirtualnym środowisku), jeśli katalog scraper otworzy się w PyCharmie, to powinien je automatycznie zainstalować. Następnie należy otworzyć product-init/ProductInit.sln w VisualStudio i uruchomić Initializer.cs
