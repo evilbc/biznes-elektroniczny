@@ -44,13 +44,13 @@ DELETE FROM ps_manufacturer;
 DELETE FROM ps_manufacturer_shop;
 DELETE FROM ps_manufacturer_lang;
 
--- usuwa wszystkie domyślnie dodane kategorie
+-- usuwa wszystkie domyślnie dodane kategorie oprócz PS_ROOT_CATEGORY i PS_HOME_CATEGORY - potrzebne w presta
 DELETE FROM ps_category_product;
-DELETE FROM ps_category;
-DELETE FROM ps_category_shop;
-DELETE FROM ps_category_group;
-DELETE FROM ps_category_lang;
-DELETE FROM ps_layered_category;
+DELETE FROM ps_category WHERE id_category NOT IN (SELECT value FROM ps_configuration where name in ('PS_ROOT_CATEGORY', 'PS_HOME_CATEGORY'));
+DELETE FROM ps_category_shop WHERE id_category NOT IN (SELECT value FROM ps_configuration where name in ('PS_ROOT_CATEGORY', 'PS_HOME_CATEGORY'));
+DELETE FROM ps_category_group WHERE id_category NOT IN (SELECT value FROM ps_configuration where name in ('PS_ROOT_CATEGORY', 'PS_HOME_CATEGORY'));
+DELETE FROM ps_category_lang WHERE id_category NOT IN (SELECT value FROM ps_configuration where name in ('PS_ROOT_CATEGORY', 'PS_HOME_CATEGORY'));
+DELETE FROM ps_layered_category WHERE id_category NOT IN (SELECT value FROM ps_configuration where name in ('PS_ROOT_CATEGORY', 'PS_HOME_CATEGORY'));
 
 -- usuwa wszystkich gości
 DELETE FROM ps_guest;

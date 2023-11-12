@@ -25,7 +25,7 @@ docker restart shop-prestashop-1
 
 ```bash
 # latest to tag, ale można równie dobrze wpisać v1 albo 1, etc.
-docker build -t niesytomichal/pg-weti-biznes-elektroniczny:latest
+docker build -t niesytomichal/pg-weti-biznes-elektroniczny:latest .
 ```
 
 Każdy może zbudować i mieć lokalny build. Do opcji push proszę o kontakt ze mną i wtedy dam uprawnienia tak aby robić push.
@@ -66,6 +66,7 @@ SHOW TABLES;
 
 ```bash
 # Plik dump.sql można zamienić na inną lokalizację, dostaniemy ten plik lokalnie a nie w kontenerze
+# Jeśli chce się zapisać również zdjęcia, należy zzipować katalog shop/img/ i plik zip umieścić w shop/tmp/
 docker exec shop-db-1 /bin/mysqldump -padmin presta > dump.sql
 ```
 
@@ -77,3 +78,5 @@ docker exec shop-db-1 /bin/mysqldump -padmin presta > dump.sql
 docker exec shop-db-1 /bin/mysqldump -padmin presta ps_table > dump.sql
 ```
 
+### Inicjalizacja produktów
+Należy najpierw odpalić scrapera (scraper/scraper.py, można uruchomić np. w PyCharmie), żeby pobrały się zdjęcia produktów. Wymagane zależności są podane w requirements.txt (najlepiej w wirtualnym środowisku), jeśli katalog scraper otworzy się w PyCharmie, to powinien je automatycznie zainstalować. Następnie należy otworzyć product-init/ProductInit.sln w VisualStudio i uruchomić Initializer.cs
