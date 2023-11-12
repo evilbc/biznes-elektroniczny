@@ -5150,6 +5150,11 @@ INSERT INTO `ps_configuration` VALUES
 /*!40000 ALTER TABLE `ps_configuration` ENABLE KEYS */;
 UNLOCK TABLES;
 
+UPDATE ps_configuration SET value='mailcatcher' WHERE name='PS_MAIL_SERVER';
+UPDATE ps_configuration SET value='2' WHERE name='PS_MAIL_METHOD';
+UPDATE ps_configuration SET value='1025' WHERE name='PS_MAIL_SMTP_PORT';
+UPDATE ps_configuration SET value='off' WHERE name='PS_MAIL_SMTP_ENCRYPTION';
+
 --
 -- Table structure for table `ps_configuration_kpi`
 --

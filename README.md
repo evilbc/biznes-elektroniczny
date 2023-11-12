@@ -80,3 +80,11 @@ docker exec shop-db-1 /bin/mysqldump -padmin presta ps_table > dump.sql
 
 ### Inicjalizacja produktów
 Należy najpierw odpalić scrapera (scraper/scraper.py, można uruchomić np. w PyCharmie), żeby pobrały się zdjęcia produktów. Wymagane zależności są podane w requirements.txt (najlepiej w wirtualnym środowisku), jeśli katalog scraper otworzy się w PyCharmie, to powinien je automatycznie zainstalować. Następnie należy otworzyć product-init/ProductInit.sln w VisualStudio i uruchomić Initializer.cs
+
+### Maile
+
+Maile dostępne są z użyciem klienta w przeglądarce opartego o HTTP na tym samym hoście zainstalowana reszta, na porcie 1080.
+Dla localhost będzie to http://localhost:1080
+Maile należy dostosować pod względem wizualnym i językowym.
+Po wyłączeniu kontenera maile znikają.
+

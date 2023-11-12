@@ -13,6 +13,14 @@ services:
       - presta_network
     volumes:
       - dbdata:/var/lib/mysql
+   
+  mailcatcher:
+     restart: on-failure
+     image: maildev/maildev:2.1.0
+     networks:
+       - presta_network
+     ports:
+       - "1080:1080" # na tym porcie jest interfejs poczty po HTTP czyli jak się ma localhost to jest http://localhost:1080
 
   prestashop:
     image: niesytomichal/pg-weti-biznes-elektroniczny:latest
@@ -45,11 +53,13 @@ services:
         # target:  /var/www/html/themes/myTheme # path to be mounted in the container
       - psdata:/var/www/html
       - etc:/etc
-      - img:/var/www/html/img
+      #- img:/var/www/html/img
+      # u mnie są błędy jak to jest mam 404 na serwerze, do sprawdzenia
 
 networks:
   presta_network:
 volumes:
+  maildata:
   psdata:
   dbdata:
   etc:

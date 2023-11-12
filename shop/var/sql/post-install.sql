@@ -158,3 +158,12 @@ INSERT INTO `ps_currency` VALUES
 (1,'','PLN','985',2,1.000000,0,1,0,0);
 /*!40000 ALTER TABLE `ps_currency` ENABLE KEYS */;
 UNLOCK TABLES;
+
+-- Ustawiamy maile na mailcatchera
+
+UPDATE ps_configuration SET value='mailcatcher' WHERE name='PS_MAIL_SERVER';
+UPDATE ps_configuration SET value='2' WHERE name='PS_MAIL_METHOD';
+UPDATE ps_configuration SET value='1025' WHERE name='PS_MAIL_SMTP_PORT';
+UPDATE ps_configuration SET value='off' WHERE name='PS_MAIL_SMTP_ENCRYPTION';
+
+
