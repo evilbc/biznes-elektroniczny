@@ -66,7 +66,7 @@ SHOW TABLES;
 
 ```bash
 # Plik dump.sql można zamienić na inną lokalizację, dostaniemy ten plik lokalnie a nie w kontenerze
-# Jeśli chce się zapisać również zdjęcia, należy zzipować katalog shop/img/ i plik zip umieścić w shop/tmp/
+# Jeśli chce się zapisać również zdjęcia, należy zzipować katalog \\wsl$\docker-desktop-data\data\docker\volumes\shop_psdata\_data\img i plik zip umieścić w shop/tmp/
 docker exec shop-db-1 /bin/mysqldump -padmin presta > dump.sql
 ```
 
