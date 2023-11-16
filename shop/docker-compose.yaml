@@ -53,8 +53,6 @@ services:
         # target:  /var/www/html/themes/myTheme # path to be mounted in the container
       - psdata:/var/www/html
       - etc:/etc
-      #- img:/var/www/html/img
-      # u mnie są błędy jak to jest mam 404 na serwerze, do sprawdzenia
 
 networks:
   presta_network:
@@ -63,10 +61,4 @@ volumes:
   psdata:
   dbdata:
   etc:
-  img:
-    driver: local
-    driver_opts:
-      o: bind
-      type: none
-      device: ./img
 
