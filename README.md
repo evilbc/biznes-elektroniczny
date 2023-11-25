@@ -8,6 +8,13 @@ Sklep obecnie generuje certyfikat automatycznie na 365 dni. Konfiguracja podstaw
 Zaczynamy w katalogu shop. 
 Polecenia docker build i docker compose wykonujemy zawsze w tym katalogu. Reszta bez znaczenia.
 
+### Zbudowanie nowego obrazu kontenera sklepu
+
+```bash
+# latest to tag, ale można równie dobrze wpisać v1 albo 1, etc.
+docker build -t niesytomichal/pg-weti-biznes-elektroniczny:latest .
+```
+
 ### Uruchomienie sklepu
 Sklep zostanie automatycznie zainstalowany i uruchomiony (jeżeli nie był zainstalowany wcześniej)
 
@@ -19,13 +26,6 @@ docker compose build && docker compose create && docker compose start
 
 ```bash
 docker restart shop-prestashop-1
-```
-
-### Zbudowanie nowego obrazu kontenera sklepu
-
-```bash
-# latest to tag, ale można równie dobrze wpisać v1 albo 1, etc.
-docker build -t niesytomichal/pg-weti-biznes-elektroniczny:latest .
 ```
 
 Każdy może zbudować i mieć lokalny build. Do opcji push proszę o kontakt ze mną i wtedy dam uprawnienia tak aby robić push.
