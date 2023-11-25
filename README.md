@@ -6,7 +6,11 @@ Sklep obecnie generuje certyfikat automatycznie na 365 dni. Konfiguracja podstaw
 ## Przydatne polecenia
 
 Zaczynamy w katalogu shop. 
-Polecenia docker build i docker compose wykonujemy zawsze w tym katalogu. Reszta bez znaczenia.
+Polecenia 
+```bash
+docker build .
+```
+i compose'y wykonujemy zawsze w tym katalogu. Reszta bez znaczenia.
 
 ### Uruchomienie sklepu
 Sklep zostanie automatycznie zainstalowany i uruchomiony (jeżeli nie był zainstalowany wcześniej)
