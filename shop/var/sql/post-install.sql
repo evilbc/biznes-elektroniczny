@@ -155,8 +155,96 @@ CREATE TABLE `ps_currency` (
 LOCK TABLES `ps_currency` WRITE;
 /*!40000 ALTER TABLE `ps_currency` DISABLE KEYS */;
 INSERT INTO `ps_currency` VALUES
-(1,'','PLN','985',2,1.000000,0,1,0,0);
+(1,'','PLN','985',2,1.000000,0,1,0,1);
 /*!40000 ALTER TABLE `ps_currency` ENABLE KEYS */;
+UNLOCK TABLES;
+
+-- problem z polskimi znakami, HEX('C582') = ł
+LOCK TABLES `ps_currency_lang` WRITE;
+/*!40000 ALTER TABLE `ps_currency_lang` DISABLE KEYS */;
+DELETE FROM ps_currency_lang WHERE id_currency = 1 AND id_lang = 1;
+INSERT INTO `ps_currency_lang` VALUES
+(1,1,CONCAT('z', UNHEX('C582'), 'oty'),CONCAT('z', UNHEX('C582')),UNHEX('232C2323302E3030C2A0C2A4'));
+/*!40000 ALTER TABLE `ps_currency_lang` ENABLE KEYS */;
+UNLOCK TABLES;
+
+
+LOCK TABLES `ps_tax` WRITE;
+/*!40000 ALTER TABLE `ps_tax` DISABLE KEYS */;
+INSERT INTO `ps_tax` VALUES
+(1,1.230,1,0);
+/*!40000 ALTER TABLE `ps_tax` ENABLE KEYS */;
+UNLOCK TABLES;
+ 
+LOCK TABLES `ps_tax_lang` WRITE;
+/*!40000 ALTER TABLE `ps_tax_lang` DISABLE KEYS */;
+INSERT INTO `ps_tax_lang` VALUES
+(1,1,'VAT'),
+(1,2,'VAT');
+/*!40000 ALTER TABLE `ps_tax_lang` ENABLE KEYS */;
+UNLOCK TABLES;
+
+LOCK TABLES `ps_tax_rule` WRITE;
+/*!40000 ALTER TABLE `ps_tax_rule` DISABLE KEYS */;
+INSERT INTO `ps_tax_rule` VALUES
+(1,1,14,0,'0','0',1,0,'');
+/*!40000 ALTER TABLE `ps_tax_rule` ENABLE KEYS */;
+UNLOCK TABLES;
+
+LOCK TABLES `ps_tax_rules_group` WRITE;
+/*!40000 ALTER TABLE `ps_tax_rules_group` DISABLE KEYS */;
+INSERT INTO `ps_tax_rules_group` VALUES
+(1,'VAT',1,0,'2023-11-09 10:31:21','2023-11-09 10:31:37');
+/*!40000 ALTER TABLE `ps_tax_rules_group` ENABLE KEYS */;
+UNLOCK TABLES;
+
+LOCK TABLES `ps_tax_rules_group_shop` WRITE;
+/*!40000 ALTER TABLE `ps_tax_rules_group_shop` DISABLE KEYS */;
+INSERT INTO `ps_tax_rules_group_shop` VALUES
+(1,1);
+/*!40000 ALTER TABLE `ps_tax_rules_group_shop` ENABLE KEYS */;
+UNLOCK TABLES;
+
+LOCK TABLES `ps_webservice_account` WRITE;
+/*!40000 ALTER TABLE `ps_webservice_account` DISABLE KEYS */;
+DELETE FROM ps_webservice_account;
+INSERT INTO `ps_webservice_account` VALUES
+(1,'NM5MUI12C95VICSZW2ELLTFWUYIXM11U','','WebserviceRequest',0,NULL,1);
+/*!40000 ALTER TABLE `ps_webservice_account` ENABLE KEYS */;
+UNLOCK TABLES;
+
+LOCK TABLES `ps_webservice_account_shop` WRITE;
+/*!40000 ALTER TABLE `ps_webservice_account_shop` DISABLE KEYS */;
+INSERT INTO `ps_webservice_account_shop` VALUES
+(1,1);
+/*!40000 ALTER TABLE `ps_webservice_account_shop` ENABLE KEYS */;
+UNLOCK TABLES;
+
+
+LOCK TABLES `ps_webservice_permission` WRITE;
+/*!40000 ALTER TABLE `ps_webservice_permission` DISABLE KEYS */;
+INSERT INTO `ps_webservice_permission` VALUES
+(1,'categories','GET',1),
+(3,'categories','POST',1),
+(2,'categories','PUT',1),
+(4,'categories','DELETE',1),
+(5,'categories','HEAD',1),
+(6,'images','GET',1),
+(8,'images','POST',1),
+(7,'images','PUT',1),
+(9,'images','DELETE',1),
+(10,'images','HEAD',1),
+(11,'products','GET',1),
+(13,'products','POST',1),
+(12,'products','PUT',1),
+(14,'products','DELETE',1),
+(15,'products','HEAD',1),
+(16,'stock_availables','GET',1),
+(18,'stock_availables','POST',1),
+(17,'stock_availables','PUT',1),
+(19,'stock_availables','DELETE',1),
+(20,'stock_availables','HEAD',1);
+/*!40000 ALTER TABLE `ps_webservice_permission` ENABLE KEYS */;
 UNLOCK TABLES;
 
 -- Ustawiamy maile na mailcatchera
@@ -166,4 +254,6 @@ UPDATE ps_configuration SET value='2' WHERE name='PS_MAIL_METHOD';
 UPDATE ps_configuration SET value='1025' WHERE name='PS_MAIL_SMTP_PORT';
 UPDATE ps_configuration SET value='off' WHERE name='PS_MAIL_SMTP_ENCRYPTION';
 
+-- włączenie webservice'u, domyślnie taka konfiguracja nie istnieje
+INSERT INTO ps_configuration (id_shop_group, id_shop, name, value, date_add, date_upd) values (null, null, 'PS_WEBSERVICE', '1', now(), now());
 
