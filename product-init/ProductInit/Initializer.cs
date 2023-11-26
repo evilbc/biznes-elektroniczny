@@ -32,6 +32,11 @@ namespace ProductInit
 
         public Initializer()
         {
+            if (ImageDirectoryEmpty())
+            {
+                throw new Exception("Brak zdjęć ze scrapera");
+            }
+
             IEnumerable<string> envFiles = new string[] { @"..\..\shop\.env" };
             DotEnvOptions envOptions = new DotEnvOptions(envFilePaths: envFiles);
             IDictionary<string, string> envVars = DotEnv.Read(envOptions);
@@ -119,7 +124,9 @@ namespace ProductInit
             {
                 product.associations.categories.Add(new Bukimedia.PrestaSharp.Entities.AuxEntities.category(id));
             }
-            return productFactory.Add(product);
+            Bukimedia.PrestaSharp.Entities.product result = productFactory.Add(product);
+            Console.WriteLine("Stworzono produkt z id " + result.id);
+            return result;
 
         }
 
@@ -130,6 +137,7 @@ namespace ProductInit
                 try
                 {
                     imageFactory.AddProductImage(product.id.Value, Path.Combine(SCRAPE_RESULT_PATH, imagePath));
+                    Console.WriteLine("Dodano zdjęcie do produktu z id " + product.id);
                 }
                 catch (Exception e)
                 {
@@ -150,6 +158,7 @@ namespace ProductInit
                 stock.quantity = random.Next(10);
                 stock.out_of_stock = 0;
                 stockAvailableFactory.Update(stock);
+                Console.WriteLine("Dodano stan magazynowy do produktu z id " + product.id);
             }
         }
 
@@ -167,6 +176,12 @@ namespace ProductInit
         private Bukimedia.PrestaSharp.Entities.AuxEntities.language PrestaString(JToken token)
         {
             return PrestaString(token.ToString());
+        }
+
+        private bool ImageDirectoryEmpty()
+        {
+            string path = Path.Combine(SCRAPE_RESULT_PATH, "img");
+            return !Directory.Exists(path) || !Directory.EnumerateFileSystemEntries(path).Any();
         }
 
 
