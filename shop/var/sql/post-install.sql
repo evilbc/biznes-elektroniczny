@@ -155,8 +155,213 @@ CREATE TABLE `ps_currency` (
 LOCK TABLES `ps_currency` WRITE;
 /*!40000 ALTER TABLE `ps_currency` DISABLE KEYS */;
 INSERT INTO `ps_currency` VALUES
-(1,'','PLN','985',2,1.000000,0,1,0,0);
+(1,'','PLN','985',2,1.000000,0,1,0,1);
 /*!40000 ALTER TABLE `ps_currency` ENABLE KEYS */;
+UNLOCK TABLES;
+
+-- problem z polskimi znakami, HEX('C582') = ł
+LOCK TABLES `ps_currency_lang` WRITE;
+/*!40000 ALTER TABLE `ps_currency_lang` DISABLE KEYS */;
+DELETE FROM ps_currency_lang WHERE id_currency = 1 AND id_lang = 1;
+INSERT INTO `ps_currency_lang` VALUES
+(1,1,CONCAT('z', UNHEX('C582'), 'oty'),CONCAT('z', UNHEX('C582')),UNHEX('232C2323302E3030C2A0C2A4'));
+/*!40000 ALTER TABLE `ps_currency_lang` ENABLE KEYS */;
+UNLOCK TABLES;
+
+-- podatki
+LOCK TABLES `ps_tax` WRITE;
+/*!40000 ALTER TABLE `ps_tax` DISABLE KEYS */;
+INSERT INTO `ps_tax` VALUES
+(1,1.230,1,0);
+/*!40000 ALTER TABLE `ps_tax` ENABLE KEYS */;
+UNLOCK TABLES;
+ 
+LOCK TABLES `ps_tax_lang` WRITE;
+/*!40000 ALTER TABLE `ps_tax_lang` DISABLE KEYS */;
+INSERT INTO `ps_tax_lang` VALUES
+(1,1,'VAT'),
+(1,2,'VAT');
+/*!40000 ALTER TABLE `ps_tax_lang` ENABLE KEYS */;
+UNLOCK TABLES;
+
+LOCK TABLES `ps_tax_rule` WRITE;
+/*!40000 ALTER TABLE `ps_tax_rule` DISABLE KEYS */;
+INSERT INTO `ps_tax_rule` VALUES
+(1,1,14,0,'0','0',1,0,'');
+/*!40000 ALTER TABLE `ps_tax_rule` ENABLE KEYS */;
+UNLOCK TABLES;
+
+LOCK TABLES `ps_tax_rules_group` WRITE;
+/*!40000 ALTER TABLE `ps_tax_rules_group` DISABLE KEYS */;
+INSERT INTO `ps_tax_rules_group` VALUES
+(1,'VAT',1,0,'2023-11-09 10:31:21','2023-11-09 10:31:37');
+/*!40000 ALTER TABLE `ps_tax_rules_group` ENABLE KEYS */;
+UNLOCK TABLES;
+
+LOCK TABLES `ps_tax_rules_group_shop` WRITE;
+/*!40000 ALTER TABLE `ps_tax_rules_group_shop` DISABLE KEYS */;
+INSERT INTO `ps_tax_rules_group_shop` VALUES
+(1,1);
+/*!40000 ALTER TABLE `ps_tax_rules_group_shop` ENABLE KEYS */;
+UNLOCK TABLES;
+
+-- api
+LOCK TABLES `ps_webservice_account` WRITE;
+/*!40000 ALTER TABLE `ps_webservice_account` DISABLE KEYS */;
+DELETE FROM ps_webservice_account;
+INSERT INTO `ps_webservice_account` VALUES
+(1,'NM5MUI12C95VICSZW2ELLTFWUYIXM11U','','WebserviceRequest',0,NULL,1);
+/*!40000 ALTER TABLE `ps_webservice_account` ENABLE KEYS */;
+UNLOCK TABLES;
+
+LOCK TABLES `ps_webservice_account_shop` WRITE;
+/*!40000 ALTER TABLE `ps_webservice_account_shop` DISABLE KEYS */;
+INSERT INTO `ps_webservice_account_shop` VALUES
+(1,1);
+/*!40000 ALTER TABLE `ps_webservice_account_shop` ENABLE KEYS */;
+UNLOCK TABLES;
+
+
+LOCK TABLES `ps_webservice_permission` WRITE;
+/*!40000 ALTER TABLE `ps_webservice_permission` DISABLE KEYS */;
+INSERT INTO `ps_webservice_permission` VALUES
+(1,'categories','GET',1),
+(3,'categories','POST',1),
+(2,'categories','PUT',1),
+(4,'categories','DELETE',1),
+(5,'categories','HEAD',1),
+(6,'images','GET',1),
+(8,'images','POST',1),
+(7,'images','PUT',1),
+(9,'images','DELETE',1),
+(10,'images','HEAD',1),
+(11,'products','GET',1),
+(13,'products','POST',1),
+(12,'products','PUT',1),
+(14,'products','DELETE',1),
+(15,'products','HEAD',1),
+(16,'stock_availables','GET',1),
+(18,'stock_availables','POST',1),
+(17,'stock_availables','PUT',1),
+(19,'stock_availables','DELETE',1),
+(20,'stock_availables','HEAD',1);
+/*!40000 ALTER TABLE `ps_webservice_permission` ENABLE KEYS */;
+UNLOCK TABLES;
+
+-- przewoźnicy
+LOCK TABLES `ps_carrier` WRITE;
+/*!40000 ALTER TABLE `ps_carrier` DISABLE KEYS */;
+INSERT INTO `ps_carrier` VALUES
+(5,5,0,'Express Delivery','',1,1,1,1,0,0,0,0,'',1,0,40,40,80,50.000000,9),
+(6,6,0,'Cheap Delivery','',1,1,1,1,0,0,0,0,'',1,1,40,40,80,50.000000,6),
+(7,5,0,'Express Delivery','',1,0,1,1,0,0,0,0,'',1,0,40,40,80,50.000000,9),
+(8,6,0,'Cheap Delivery','',1,0,1,1,0,0,0,0,'',1,1,40,40,80,50.000000,6);
+/*!40000 ALTER TABLE `ps_carrier` ENABLE KEYS */;
+UNLOCK TABLES;
+
+
+LOCK TABLES `ps_carrier_group` WRITE;
+/*!40000 ALTER TABLE `ps_carrier_group` DISABLE KEYS */;
+INSERT INTO `ps_carrier_group` VALUES
+(5,1),
+(5,2),
+(5,3),
+(6,1),
+(6,2),
+(6,3),
+(7,1),
+(7,2),
+(7,3),
+(8,1),
+(8,2),
+(8,3);
+/*!40000 ALTER TABLE `ps_carrier_group` ENABLE KEYS */;
+UNLOCK TABLES;
+
+LOCK TABLES `ps_carrier_lang` WRITE;
+/*!40000 ALTER TABLE `ps_carrier_lang` DISABLE KEYS */;
+INSERT INTO `ps_carrier_lang` VALUES
+(5,1,1,'1 dzien'),
+(6,1,1,'od 3 do 4 dni'),
+(7,1,1,'1 dzien'),
+(8,1,1,'od 3 do 4 dni'),
+(5,1,2,'1 dzien'),
+(6,1,2,'od 3 do 4 dni'),
+(7,1,2,'1 dzien'),
+(8,1,2,'od 3 do 4 dni');
+/*!40000 ALTER TABLE `ps_carrier_lang` ENABLE KEYS */;
+UNLOCK TABLES;
+
+LOCK TABLES `ps_carrier_tax_rules_group_shop` WRITE;
+/*!40000 ALTER TABLE `ps_carrier_tax_rules_group_shop` DISABLE KEYS */;
+INSERT INTO `ps_carrier_tax_rules_group_shop` VALUES
+(5,0,1),
+(6,0,1),
+(7,0,1),
+(8,0,1);
+/*!40000 ALTER TABLE `ps_carrier_tax_rules_group_shop` ENABLE KEYS */;
+UNLOCK TABLES;
+
+LOCK TABLES `ps_carrier_zone` WRITE;
+/*!40000 ALTER TABLE `ps_carrier_zone` DISABLE KEYS */;
+INSERT INTO `ps_carrier_zone` VALUES
+(5,1),
+(5,7),
+(6,1),
+(6,7),
+(7,1),
+(7,7),
+(8,1),
+(8,7);
+/*!40000 ALTER TABLE `ps_carrier_zone` ENABLE KEYS */;
+UNLOCK TABLES;
+
+LOCK TABLES `ps_module_carrier` WRITE;
+/*!40000 ALTER TABLE `ps_module_carrier` DISABLE KEYS */;
+INSERT INTO `ps_module_carrier` VALUES
+(14,1,5),
+(14,1,6),
+(35,1,5),
+(35,1,6),
+(56,1,5),
+(56,1,6);
+/*!40000 ALTER TABLE `ps_module_carrier` ENABLE KEYS */;
+UNLOCK TABLES;
+
+LOCK TABLES `ps_range_weight` WRITE;
+/*!40000 ALTER TABLE `ps_range_weight` DISABLE KEYS */;
+INSERT INTO `ps_range_weight` VALUES
+(5,5,0.000000,10.000000),
+(6,5,10.000000,50.000000),
+(7,6,0.000000,10.000000),
+(8,6,10.000000,50.000000),
+(9,7,0.000000,10.000000),
+(10,7,10.000000,50.000000),
+(11,8,0.000000,10.000000),
+(12,8,10.000000,50.000000);
+/*!40000 ALTER TABLE `ps_range_weight` ENABLE KEYS */;
+UNLOCK TABLES;
+
+LOCK TABLES `ps_delivery` WRITE;
+/*!40000 ALTER TABLE `ps_delivery` DISABLE KEYS */;
+INSERT INTO `ps_delivery` VALUES
+(19,NULL,NULL,5,NULL,5,1,5.000000),
+(20,NULL,NULL,5,NULL,5,7,5.000000),
+(23,NULL,NULL,5,NULL,6,1,10.000000),
+(24,NULL,NULL,5,NULL,6,7,10.000000),
+(27,NULL,NULL,6,NULL,7,1,2.000000),
+(28,NULL,NULL,6,NULL,7,7,2.000000),
+(31,NULL,NULL,6,NULL,8,1,5.000000),
+(32,NULL,NULL,6,NULL,8,7,5.000000),
+(35,NULL,NULL,7,NULL,9,1,5.000000),
+(36,NULL,NULL,7,NULL,9,7,5.000000),
+(39,NULL,NULL,7,NULL,10,1,10.000000),
+(40,NULL,NULL,7,NULL,10,7,10.000000),
+(43,NULL,NULL,8,NULL,11,1,2.000000),
+(44,NULL,NULL,8,NULL,11,7,2.000000),
+(47,NULL,NULL,8,NULL,12,1,5.000000),
+(48,NULL,NULL,8,NULL,12,7,5.000000);
+/*!40000 ALTER TABLE `ps_delivery` ENABLE KEYS */;
 UNLOCK TABLES;
 
 -- Ustawiamy maile na mailcatchera
@@ -166,4 +371,9 @@ UPDATE ps_configuration SET value='2' WHERE name='PS_MAIL_METHOD';
 UPDATE ps_configuration SET value='1025' WHERE name='PS_MAIL_SMTP_PORT';
 UPDATE ps_configuration SET value='off' WHERE name='PS_MAIL_SMTP_ENCRYPTION';
 
+-- włączenie webservice'u, domyślnie taka konfiguracja nie istnieje
+INSERT INTO ps_configuration (id_shop_group, id_shop, name, value, date_add, date_upd) values (null, null, 'PS_WEBSERVICE', '1', now(), now());
 
+-- przewoźnicy
+UPDATE ps_configuration SET value = '8' WHERE name ='PS_CARRIER_DEFAULT';
+UPDATE ps_configuration SET value = '2000' WHERE name ='PS_SHIPPING_FREE_PRICE';
