@@ -28,6 +28,8 @@ if [ "$BIZ_DB_USE_DUMP" -eq "1" ] ; then
 	unzip -q -o -u /tmp/img.zip -d /var/www/html/
 fi
 
+unzip -q -o -u /tmp/ps_cashondelivery.zip -d /var/www/html/modules/
+
 echo 'Czyszczenie bazy zakończone'
 
 
