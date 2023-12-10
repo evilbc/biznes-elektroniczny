@@ -5369,7 +5369,7 @@ INSERT INTO `ps_configuration_lang` VALUES
 (295,2,'My wishlist','2023-11-09 10:01:22'),
 (296,1,'Create new list','2023-11-09 10:01:22'),
 (296,2,'Create new list','2023-11-09 10:01:22'),
-(317,1,'sale70.png','2023-11-09 10:01:45'),
+(317,1,'74ca18f6e255f3402ee9eae5402ceee1.png','2023-12-10 23:10:05'),
 (317,2,'sale70.png','2023-11-09 10:01:45'),
 (318,1,'','2023-11-09 10:01:45'),
 (318,2,'','2023-11-09 10:01:45'),
@@ -7771,7 +7771,7 @@ CREATE TABLE `ps_homeslider` (
   `id_homeslider_slides` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `id_shop` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id_homeslider_slides`,`id_shop`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -7783,7 +7783,10 @@ LOCK TABLES `ps_homeslider` WRITE;
 INSERT INTO `ps_homeslider` VALUES
 (1,1),
 (2,1),
-(3,1);
+(3,1),
+(4,1),
+(5,1),
+(6,1);
 /*!40000 ALTER TABLE `ps_homeslider` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -7799,7 +7802,7 @@ CREATE TABLE `ps_homeslider_slides` (
   `position` int(10) unsigned NOT NULL DEFAULT 0,
   `active` tinyint(1) unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id_homeslider_slides`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -7809,9 +7812,12 @@ CREATE TABLE `ps_homeslider_slides` (
 LOCK TABLES `ps_homeslider_slides` WRITE;
 /*!40000 ALTER TABLE `ps_homeslider_slides` DISABLE KEYS */;
 INSERT INTO `ps_homeslider_slides` VALUES
-(1,1,1),
-(2,2,1),
-(3,3,1);
+(1,1,0),
+(2,2,0),
+(3,3,0),
+(4,4,1),
+(5,5,1),
+(6,6,1);
 /*!40000 ALTER TABLE `ps_homeslider_slides` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -7846,7 +7852,13 @@ INSERT INTO `ps_homeslider_slides_lang` VALUES
 (2,1,'Sample 2','<h3>EXCEPTEUR OCCAECAT</h3>\n                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin tristique in tortor et dignissim. Quisque non tempor leo. Maecenas egestas sem elit</p>','sample-2','https://www.prestashop-project.org?utm_source=back-office&utm_medium=v17_homeslider&utm_campaign=back-office-PL&utm_content=download','sample-2.jpg'),
 (2,2,'Sample 2','<h3>EXCEPTEUR OCCAECAT</h3>\n                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin tristique in tortor et dignissim. Quisque non tempor leo. Maecenas egestas sem elit</p>','sample-2','https://www.prestashop-project.org?utm_source=back-office&utm_medium=v17_homeslider&utm_campaign=back-office-PL&utm_content=download','sample-2.jpg'),
 (3,1,'Sample 3','<h3>EXCEPTEUR OCCAECAT</h3>\n                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin tristique in tortor et dignissim. Quisque non tempor leo. Maecenas egestas sem elit</p>','sample-3','https://www.prestashop-project.org?utm_source=back-office&utm_medium=v17_homeslider&utm_campaign=back-office-PL&utm_content=download','sample-3.jpg'),
-(3,2,'Sample 3','<h3>EXCEPTEUR OCCAECAT</h3>\n                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin tristique in tortor et dignissim. Quisque non tempor leo. Maecenas egestas sem elit</p>','sample-3','https://www.prestashop-project.org?utm_source=back-office&utm_medium=v17_homeslider&utm_campaign=back-office-PL&utm_content=download','sample-3.jpg');
+(3,2,'Sample 3','<h3>EXCEPTEUR OCCAECAT</h3>\n                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin tristique in tortor et dignissim. Quisque non tempor leo. Maecenas egestas sem elit</p>','sample-3','https://www.prestashop-project.org?utm_source=back-office&utm_medium=v17_homeslider&utm_campaign=back-office-PL&utm_content=download','sample-3.jpg'),
+(4,1,'Super Bluzy','','','https://localhost/pl/12-bluzy','f3edb13af94357d750555ac770d0f5351e83b905_slajder1.jpg'),
+(4,2,'','','','',''),
+(5,1,'Kurtki','','','https://localhost/pl/18-kurtki_i_softshelle','8aee0f74a6e30816f646df1f3ce726c11a7e8486_slajder2.jpg'),
+(5,2,'','','','',''),
+(6,1,'Dla ćwiczących','','','https://localhost/pl/34-komplety_sportowe','16f50afb0a4dd870fe3e92a4b060fb9e8ba76008_slajder3.jpg'),
+(6,2,'','','','','');
 /*!40000 ALTER TABLE `ps_homeslider_slides_lang` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -22061,9 +22073,9 @@ CREATE TABLE `ps_psreassurance` (
 LOCK TABLES `ps_psreassurance` WRITE;
 /*!40000 ALTER TABLE `ps_psreassurance` DISABLE KEYS */;
 INSERT INTO `ps_psreassurance` VALUES
-(1,'//modules/blockreassurance/views/img/reassurance/pack2/security.svg',NULL,1,1,NULL,NULL,'2023-11-09 09:03:51',NULL),
-(2,'//modules/blockreassurance/views/img/reassurance/pack2/carrier.svg',NULL,1,2,NULL,NULL,'2023-11-09 09:03:51',NULL),
-(3,'//modules/blockreassurance/views/img/reassurance/pack2/parcel.svg',NULL,1,3,NULL,NULL,'2023-11-09 09:03:51',NULL);
+(1,'//modules/blockreassurance/views/img/reassurance/pack2/security.svg',NULL,0,1,NULL,NULL,'2023-11-09 09:03:51','2023-12-11 00:27:06'),
+(2,'//modules/blockreassurance/views/img/reassurance/pack2/carrier.svg',NULL,0,2,NULL,NULL,'2023-11-09 09:03:51','2023-12-11 00:27:07'),
+(3,'//modules/blockreassurance/views/img/reassurance/pack2/parcel.svg',NULL,0,3,NULL,NULL,'2023-11-09 09:03:51','2023-12-11 00:27:09');
 /*!40000 ALTER TABLE `ps_psreassurance` ENABLE KEYS */;
 UNLOCK TABLES;
 

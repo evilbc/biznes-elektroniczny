@@ -29,6 +29,10 @@ if [ "$BIZ_DB_USE_DUMP" -eq "1" ] ; then
 fi
 
 unzip -q -o -u /tmp/ps_cashondelivery.zip -d /var/www/html/modules/
+mv /tmp/slajder1.jpg /var/www/html/modules/ps_imageslider/images/f3edb13af94357d750555ac770d0f5351e83b905_slajder1.jpg
+mv /tmp/slajder2.jpg /var/www/html/modules/ps_imageslider/images/8aee0f74a6e30816f646df1f3ce726c11a7e8486_slajder2.jpg
+mv /tmp/slajder3.jpg /var/www/html/modules/ps_imageslider/images/16f50afb0a4dd870fe3e92a4b060fb9e8ba76008_slajder3.jpg
+mv /tmp/banner.png /var/www/html/modules/ps_banner/img/74ca18f6e255f3402ee9eae5402ceee1.png
 
 echo 'Czyszczenie bazy zakończone'
 

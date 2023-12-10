@@ -6,10 +6,10 @@ body{
 }
 
 .h1, .h2, .h3{
-    color: black
+    color: black;
 }
 
-#header{ background: #7F0909 !important; color: black;}
+#header{ background: #7F0909 !important; color: rgb(255, 197, 0) !important;}
 #wrapper { background: #FFC500 !important; }
 #footer { background: #7F0909 !important; }
 .header-top{background: #FFC500 !important; }
@@ -59,7 +59,7 @@ body{
 }
 
 #header .header-nav .cart-preview .shopping-cart{
-    color: black !important;
+    color: black;
 }
 
 #carousel{
@@ -71,7 +71,7 @@ body{
 }
 
 a, a:visited, a:active {
-    color: black !important;
+    color: black;
     text-decoration: none;
 }
 
@@ -114,14 +114,12 @@ li.product-flag.new, li.product-flag.out_of_stock{
 
 #header .header-nav .blockcart{
     background:#7F0909 !important;
-}
-
-label{
-    color: #FFC500 !important;
+	color: rgb(255, 197, 0) !important;
 }
 
 .dropdown-menu{
     background-color: #7F0909 !important;
+	color: rgb(255, 197, 0) !important;
 }
 
 #submit-login{
@@ -130,21 +128,52 @@ label{
 
 .page-content.card.card-block{
     background-color: #7F0909 !important;
+	color: rgb(255, 197, 0) !important;
 }
 
 .tabs{
     background-color: #7F0909 !important;
+	color: rgb(255, 197, 0) !important;
 }
 
 #product-comments-list > div{
     background-color: #7F0909 !important;
+	color: rgb(255, 197, 0) !important;
 }
 
 #description > div{
     background-color: #7F0909 !important;
-    color: #FFC500 !important;
+	color: rgb(255, 197, 0) !important;
 }
 
 .nav-tabs .nav-link.active, .nav-tabs .nav-link.active:focus, .nav-tabs .nav-link.active:hover, .nav-tabs .nav-item.open .nav-link, .nav-tabs .nav-item.open .nav-link:focus, .nav-tabs .nav-item.open .nav-link:hover{
     background-color: #FFC500 !important;
+}
+
+#header a {
+	color: rgb(255, 197, 0);
+}
+
+#header .dropdown .expand-more {
+	color: rgb(255, 197, 0);
+}
+
+p, .page-content.page-cms ul {
+	color: black;
+}
+
+.footer-container li a {
+	color: black;
+}
+
+.account-list a {
+	color: black;
+}
+
+.product-miniature .product-title a {
+	color: black;
+}
+
+#products .all-product-link, .featured-products .all-product-link, .product-accessories .all-product-link {
+	color: black;
 }
