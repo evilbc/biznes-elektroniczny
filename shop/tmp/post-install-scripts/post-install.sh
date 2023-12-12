@@ -25,6 +25,7 @@ if [ "$BIZ_DB_USE_DUMP" -eq "1" ] ; then
 	# Po substytucji zmiennych środowiskowych wykonujemy to na serwerze
 	mysql -u$DB_USER -p$DB_PASSWD -h $DB_SERVER $DB_NAME < /var/sql/sql-hostname-update.sql
 	# Odtworzenie zdjęć
+	echo 'Odtworzenie zdjęć'
 	unzip -q -o -u /tmp/img.zip -d /var/www/html/
 fi
 
