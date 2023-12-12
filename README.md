@@ -1,5 +1,5 @@
 # biznes-elektroniczny
-Projekt na biznes elektroniczny - sklep w Prestashop
+Projekt na biznes elektroniczny - sklep w Prestashop, oparty na sklepie https://sklep.keeza.pl/ (zescrapowane produkty)
 
 Sklep obecnie generuje certyfikat automatycznie na 365 dni. Konfiguracja podstawowa w pliku shop/.env
 
@@ -88,3 +88,23 @@ Dla localhost będzie to http://localhost:1080
 Maile należy dostosować pod względem wizualnym i językowym.
 Po wyłączeniu kontenera maile znikają.
 
+
+## Autorzy
+
+- Paweł Jastrzębski
+- Michał Niesyto
+- Bartosz Kołakowski
+- Maksym Nowak
+- Michał Mróz
+
+## Wykorzystane oprogramowanie
+
+Prestashop 1.7.8
+
+mariadb:10.10
+
+maildev:2.1.0
+
+C# (7.0) - dotenv.net 3.1.3, Newtonsoft.Json 13.0.3, PrestaSharp 1.2.9
+
+Python - Scrapy 2.11.0, beautifulsoup4 4.12.2, itemadapter 0.8.0, Pillow 10.1.0, pytest, selenium
