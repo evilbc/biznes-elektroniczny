@@ -1,0 +1,179 @@
+@import url('https://fonts.cdnfonts.com/css/harry-potter');
+
+body{
+    font-family: 'Harry Potter', sans-serif;
+    color: black;
+}
+
+.h1, .h2, .h3{
+    color: black;
+}
+
+#header{ background: #7F0909 !important; color: rgb(255, 197, 0) !important;}
+#wrapper { background: #FFC500 !important; }
+#footer { background: #7F0909 !important; }
+.header-top{background: #FFC500 !important; }
+
+#custom-text{
+    background: #7F0909 !important; 
+    border: 2px solid #7e0000; 
+    border-radius: 10px; 
+    padding: 15px; 
+    box-shadow: 0 0 10px rgba(255, 21, 21, 0.815); 
+}
+
+.cart-grid-body, body#checkout section.checkout-step {
+    background-color: #7e0000 !important;
+}
+
+#custom-text > h2, 
+#custom-text > h1, 
+#custom-text > h3, 
+#custom-text > p, 
+#custom-text > p > strong{
+    color: #FFC500 !important;
+}
+
+.card{
+    background-color: #7F0909 !important;
+}
+
+.btn-primary, .btn-secondary, .btn-tertiary{
+    font-size: small;
+}
+
+.products.row{
+    background: #7F0909 !important; 
+    border: 2px solid #7e0000; 
+    border-radius: 10px; 
+    padding: 15px; 
+    box-shadow: 0 0 10px rgba(255, 21, 21, 0.815); 
+}
+
+#blockEmailSubscription_displayFooterBefore{
+    background: #FFC500 !important;
+    border: 2px solid #7e0000; 
+    border-radius: 10px; 
+    padding: 15px; 
+    box-shadow: 0 0 10px rgba(255, 212, 21, 0.938); 
+}
+
+#header .header-nav .cart-preview .shopping-cart{
+    color: black;
+}
+
+#carousel{
+    box-shadow: 0 0 10px rgba(255, 37, 21, 0.938); 
+}
+
+.input-wrapper{
+    color: #7F0909 !important;
+}
+
+a, a:visited, a:active {
+    color: black;
+    text-decoration: none;
+}
+
+a:hover{
+    color: rgb(228, 32, 32) !important;
+}
+
+.block-contact .block-contact-title{
+    color: black
+}
+
+.block-contact{
+    color: black
+}
+
+.dropdown .expand-more{
+    color: black
+}
+
+.product-description{
+    background: #FFC500 !important;
+}
+
+.contact-form{
+    background:#7F0909 !important;
+}
+
+li.product-flag.new, li.product-flag.out_of_stock{
+    background: #FFC500 !important;
+    color: #7F0909 !important;
+}
+
+.footer-container > .container{
+    background: #FFC500 !important;
+    border: 2px solid #7e0000; 
+    border-radius: 10px; 
+    padding: 15px; 
+    box-shadow: 0 0 10px rgba(255, 212, 21, 0.938); 
+}
+
+#header .header-nav .blockcart{
+    background:#7F0909 !important;
+	color: rgb(255, 197, 0) !important;
+}
+
+.dropdown-menu{
+    background-color: #7F0909 !important;
+	color: rgb(255, 197, 0) !important;
+}
+
+#submit-login{
+    background-color: #FFC500 !important;
+}
+
+.page-content.card.card-block{
+    background-color: #7F0909 !important;
+	color: rgb(255, 197, 0) !important;
+}
+
+.tabs{
+    background-color: #7F0909 !important;
+	color: rgb(255, 197, 0) !important;
+}
+
+#product-comments-list > div{
+    background-color: #7F0909 !important;
+	color: rgb(255, 197, 0) !important;
+}
+
+#description > div{
+    background-color: #7F0909 !important;
+	color: rgb(255, 197, 0) !important;
+}
+
+.nav-tabs .nav-link.active, .nav-tabs .nav-link.active:focus, .nav-tabs .nav-link.active:hover, .nav-tabs .nav-item.open .nav-link, .nav-tabs .nav-item.open .nav-link:focus, .nav-tabs .nav-item.open .nav-link:hover{
+    background-color: #FFC500 !important;
+}
+
+#header a {
+	color: rgb(255, 197, 0);
+}
+
+#header .dropdown .expand-more {
+	color: rgb(255, 197, 0);
+}
+
+p, .page-content.page-cms ul {
+	color: black;
+}
+
+.footer-container li a {
+	color: black;
+}
+
+.account-list a {
+	color: black;
+}
+
+.product-miniature .product-title a {
+	color: black;
+}
+
+#products .all-product-link, .featured-products .all-product-link, .product-accessories .all-product-link {
+	color: black;
+}
