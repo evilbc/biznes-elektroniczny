@@ -107,4 +107,4 @@ maildev:2.1.0
 
 C# (7.0) - dotenv.net 3.1.3, Newtonsoft.Json 13.0.3, PrestaSharp 1.2.9
 
-Python - Scrapy 2.11.0, beautifulsoup4 4.12.2, itemadapter 0.8.0, Pillow 10.1.0, pytest, selenium
+Python (3) - Scrapy 2.11.0, beautifulsoup4 4.12.2, itemadapter 0.8.0, Pillow 10.1.0, pytest 7.4.3, selenium 4.15.2, webdriver_manager 4.0.1
