@@ -48,9 +48,9 @@ services:
       # - type: bind
         # source: ./modules/testModule # local path to the module
         # target: /var/www/html/modules/testModule # path to be mounted in the container
-      # - type: bind
-        # source: ./themes/myTheme # local path to the theme
-        # target:  /var/www/html/themes/myTheme # path to be mounted in the container
+      #- type: bind
+       # source: ./theme/child_classic # local path to the theme
+        #target:  /var/www/html/themes/child_classic # path to be mounted in the container
       - psdata:/var/www/html
       - etc:/etc
 
