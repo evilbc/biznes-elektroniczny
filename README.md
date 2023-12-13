@@ -15,6 +15,12 @@ Sklep zostanie automatycznie zainstalowany i uruchomiony (jeżeli nie był zains
 docker compose build && docker compose create && docker compose start
 ```
 
+Alternatywnie można użyć innego polecenia, ale wtedy po naciśnięciu ctrl+c wszystko się wyłącza.
+Natomiast można w ten sposób łatwo śledzić logi między różnymi kontenerami.
+```bash
+docker compose up
+``
+
 ### Restart sklepu (bez bazy)
 
 ```bash
