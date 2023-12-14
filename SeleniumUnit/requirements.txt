@@ -1,4 +1,3 @@
-Użyte biblioteki:
-pytest=7.4.3
-selenium=4.15.2
-webdriver_manager=4.0.1
+pytest==7.4.3
+selenium==4.15.2
+webdriver_manager==4.0.1
