@@ -19,7 +19,7 @@ Alternatywnie można użyć innego polecenia, ale wtedy po naciśnięciu ctrl+c 
 Natomiast można w ten sposób łatwo śledzić logi między różnymi kontenerami.
 ```bash
 docker compose up
-``
+```
 
 ### Restart sklepu (bez bazy)
 
