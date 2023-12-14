@@ -94,6 +94,14 @@ Dla localhost będzie to http://localhost:1080
 Maile należy dostosować pod względem wizualnym i językowym.
 Po wyłączeniu kontenera maile znikają.
 
+### Polecenie na dump bazy danych aby zmienić liczbę produktów na stanie
+
+```bash
+# Polecenie początkowe, trzeba go użyć przed modyfikacją liczby produktów, zapisuje aktualną liczbę produktów
+docker exec shop-db-1 /bin/mysqldump -padmin presta ps_stock_available > dump.sql
+# Polecenie do użycia po testach, przywraca liczbę produktów do zapisanej wartości
+docker exec -i shop-db-1 /bin/mysql -uuser -padmin -h db presta < dump.sql
+```
 
 ## Autorzy
 

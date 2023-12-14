@@ -11,10 +11,34 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
 from webdriver_manager.chrome import ChromeDriverManager
 
+def add_to_chart_and_continue_shopping():
+    driver.find_element("xpath", "//button[@data-button-action='add-to-cart']").click()
+    driver.find_element("xpath", "//button[text() = 'Kontynuuj zakupy']").click()
+
+def select_quantity(number):
+    driver.find_element("id", "quantity_wanted").click()
+    driver.find_element("id", "quantity_wanted").send_keys(Keys.BACKSPACE)
+    driver.find_element("id", "quantity_wanted").send_keys(str(number))
+
+def select_by_name(name):
+    driver.find_element("xpath", "//a[contains(text(), '" + name + "')]").click()
+
+def select_category(category):
+    driver.find_element("xpath", "//span[contains(text(), 'Strona główna')]").click()
+    driver.find_element("xpath", "//a[contains(text(), 'Wszystkie produkty')]").click()
+    driver.find_element("xpath", "//a[contains(text(), '" + category + "')]").click()
+
+def select_current_category(category):
+    driver.find_element("xpath", "//span[contains(text(), '" + category + "')]").click()
+
+def select_size_and_material(size, material):
+    driver.find_element("xpath", "//option[@title='" + size + "']").click()
+    driver.find_element("xpath", "//input[@title='" + material + "']").click()
+
 @pytest.fixture
 def test_setup():
     options = Options()
-    # options.add_experimental_option("detach", True)
+    options.add_experimental_option("detach", True)
     options.add_argument("--ignore-certificate-errors")
 
     global driver
@@ -26,72 +50,66 @@ def test_add_to_basket(test_setup):
     driver.get("https://localhost/pl/2-strona-glowna")
     # driver.find_element("id", "details-button").click()
     # driver.find_element("id", "proceed-link").click()
-    driver.find_element("xpath", "//*[contains(text(), 'Lifestyle')]").click()
-    driver.find_element("xpath", "//*[contains(text(), 'Bawełniane spodenki Buffalo...')]").click()
-    driver.find_element("id", "quantity_wanted").click()
-    driver.find_element("id", "quantity_wanted").send_keys(Keys.BACKSPACE)
-    driver.find_element("id", "quantity_wanted").send_keys("3")
-    driver.find_element("xpath", "//button[@data-button-action='add-to-cart']").click()
-    driver.find_element("xpath", "//button[@class='btn btn-secondary']").click()
 
-    driver.find_element("xpath", "//a[@href='https://localhost/pl/10-lifestyle']").click()
-    driver.find_element("xpath", "//a[@href='https://localhost/pl/spodniemeskie/111-spodnie-dresowe-meskie.html']").click()
-    driver.find_element("xpath", "//button[@data-button-action='add-to-cart']").click()
-    driver.find_element("xpath", "//button[@class='btn btn-secondary']").click()
+    driver.find_element("xpath", "//a[contains(text(), 'Lifestyle')]").click()
+    select_by_name('Bawełniane spodenki Buffalo...')
+    select_quantity(3)
+    add_to_chart_and_continue_shopping()
 
-    driver.find_element("xpath", "//a[@href='https://localhost/pl/10-lifestyle']").click()
-    driver.find_element("xpath", "//a[@href='https://localhost/pl/skarpetki/99-skarpetki-lifestyle-rowerki.html']").click()
-    driver.find_element("id", "quantity_wanted").click()
-    driver.find_element("id", "quantity_wanted").send_keys(Keys.BACKSPACE)
-    driver.find_element("id", "quantity_wanted").send_keys("2")
-    driver.find_element("xpath", "//button[@data-button-action='add-to-cart']").click()
-    driver.find_element("xpath", "//button[@class='btn btn-secondary']").click()
+    select_current_category('Lifestyle')
+    select_by_name('Spodnie dresowe męskie')
+    add_to_chart_and_continue_shopping()
 
-    driver.find_element("xpath", "//a[@href='https://localhost/pl/10-lifestyle']").click()
-    driver.find_element("xpath", "//a[@href='https://localhost/pl/odziezzimowa/98-plaszcz-zimowy-brugia.html']").click()
-    driver.find_element("xpath", "//button[@data-button-action='add-to-cart']").click()
-    driver.find_element("xpath", "//button[@class='btn btn-secondary']").click()
+    select_current_category('Lifestyle')
+    select_by_name('Skarpetki  lifestyle rowerki')
+    select_quantity(2)
+    add_to_chart_and_continue_shopping()
 
-    driver.find_element("xpath", "//a[@href='https://localhost/pl/10-lifestyle']").click()
-    driver.find_element("xpath", "//a[@href='https://localhost/pl/kurtki_i_softshelle/92-softshell-damski-taliowany-black.html']").click()
-    driver.find_element("id", "quantity_wanted").click()
-    driver.find_element("id", "quantity_wanted").send_keys(Keys.BACKSPACE)
-    driver.find_element("id", "quantity_wanted").send_keys("4")
-    driver.find_element("xpath", "//button[@data-button-action='add-to-cart']").click()
-    driver.find_element("xpath", "//button[@class='btn btn-secondary']").click()
+    select_current_category('Lifestyle')
+    select_by_name('Płaszcz zimowy Brugia')
+    add_to_chart_and_continue_shopping()
 
-    driver.find_element("xpath", "//a[@href='https://localhost/pl/10-lifestyle']").click()
-    driver.find_element("xpath", "//a[@href='https://localhost/pl/czapki_i_kominy/42-czapka-i-komin.html']").click()
-    driver.find_element("xpath", "//button[@data-button-action='add-to-cart']").click()
-    driver.find_element("xpath", "//button[@class='btn btn-secondary']").click()
+    select_current_category('Lifestyle')
+    select_by_name('Softshell damski taliowany...')
+    select_quantity(4)
+    add_to_chart_and_continue_shopping()
 
-    driver.find_element("xpath", "//a[@href='https://localhost/pl/10-lifestyle']").click()
-    driver.find_element("xpath", "//a[@href='https://localhost/pl/czapki_z_daszkiem/46-czapka-z-daszkiem-keeza-pink.html']").click()
-    driver.find_element("id", "quantity_wanted").click()
-    driver.find_element("id", "quantity_wanted").send_keys(Keys.BACKSPACE)
-    driver.find_element("id", "quantity_wanted").send_keys("5")
-    driver.find_element("xpath", "//button[@data-button-action='add-to-cart']").click()
-    driver.find_element("xpath", "//button[@class='btn btn-secondary']").click()
+    select_current_category('Lifestyle')
+    select_by_name('Czapka i komin')
+    add_to_chart_and_continue_shopping()
 
-    driver.find_element("xpath", "//a[@href='https://localhost/pl/']").click()
-    driver.find_element("xpath", "//a[@href='https://localhost/pl/2-strona-glowna']").click()
-    driver.find_element("xpath", "//*[contains(text(), 'Odzież sportowa')]").click()
-    driver.get("https://localhost/pl/spodenki_sportowe/199-krotkie-spodenki-nesta.html")
-    driver.find_element("xpath", "//button[@data-button-action='add-to-cart']").click()
-    driver.find_element("xpath", "//button[@class='btn btn-secondary']").click()
+    select_current_category('Lifestyle')
+    select_by_name('Czapka z daszkiem KEEZA PINK')
+    select_quantity(5)
+    add_to_chart_and_continue_shopping()
 
-    driver.find_element("xpath", "//a[@href='https://localhost/pl/24-odziezsportowa']").click()
-    driver.find_element("xpath", "//a[@href='https://localhost/pl/skarpety_sportowe/180-skarpetki-stopki-biale-trojpak.html']").click()
-    driver.find_element("id", "quantity_wanted").click()
-    driver.find_element("id", "quantity_wanted").send_keys(Keys.BACKSPACE)
-    driver.find_element("id", "quantity_wanted").send_keys("6")
-    driver.find_element("xpath", "//button[@data-button-action='add-to-cart']").click()
-    driver.find_element("xpath", "//button[@class='btn btn-secondary']").click()
+    select_category('Odzież sportowa')
+    select_by_name('Krótkie spodenki Nesta')
+    add_to_chart_and_continue_shopping()
 
-    driver.find_element("xpath", "//a[@href='https://localhost/pl/24-odziezsportowa']").click()
-    driver.find_element("xpath", "//a[@href='https://localhost/pl/odzieztermoaktywna/175-komplet-termoaktywny-z-dlugim-rekawem.html']").click()
-    driver.find_element("xpath", "//button[@data-button-action='add-to-cart']").click()
-    driver.find_element("xpath", "//button[@class='btn btn-secondary']").click()
+    select_current_category('Odzież sportowa')
+    select_by_name('Bluza sportowa z kapturem Hagi')
+    select_quantity(3)
+    add_to_chart_and_continue_shopping()
+
+    select_current_category('Odzież sportowa')
+    select_by_name('Komplet termoaktywny z...')
+    add_to_chart_and_continue_shopping()
+
+    select_category('Wyprzedaż')
+    select_by_name('Getry sportowe')
+    select_size_and_material('L', 'Syntetyczne')
+    add_to_chart_and_continue_shopping()
+
+    select_current_category('Wyprzedaż')
+    select_by_name('Getry sportowe')
+    select_size_and_material('M', 'Bawełna')
+    add_to_chart_and_continue_shopping()
+
+    select_current_category('Wyprzedaż')
+    select_by_name('Koszulka Casual line')
+    select_size_and_material('S', 'Len')
+    add_to_chart_and_continue_shopping()
 
 def test_find_by_name():
     driver.find_element("xpath", "//input[@placeholder='Szukaj w naszym katalogu']").click()
@@ -138,16 +156,27 @@ def test_make_order_and_send_address_data():
 
 def test_choose_transporter():
     driver.find_element("xpath", "//button[@name='confirmDeliveryOption']").click()
-    driver.find_element("id", "payment-option-1").click()
+
+def test_select_payment_on_delivery():
+    driver.find_element("xpath", "//span[contains(text(),'Zapłać gotówką przy odbiorze')]").click()
     driver.find_element("id", "conditions_to_approve[terms-and-conditions]").click()
 
-def test_approve_purchase(test_teardown):
+def test_approve_purchase():
     driver.find_element("xpath", "//button[contains(text(),'Złóż zamówienie')]").click()
-#driver.execute_script("window.history.go(-1)")
 
+def test_check_order_status():
+    driver.find_element("xpath", "//span[contains(text(),'Strona główna')]").click()
+    driver.find_element("xpath", "//a[contains(text(),'Zamówienia')]").click()
+    driver.find_element("xpath", "//a[contains(text(),'Szczegóły')]").click()
+
+def test_download_invoice():
+    driver.find_element("xpath", "//a[contains(text(),'Pobierz fakturę proforma w pliku PDF')]").click()
+
+'''
 @pytest.fixture()
 def test_teardown():
     yield
     driver.close()
     driver.quit()
     print("Test completed")
+'''
