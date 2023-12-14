@@ -15,6 +15,10 @@ def add_to_chart_and_continue_shopping():
     driver.find_element("xpath", "//button[@data-button-action='add-to-cart']").click()
     driver.find_element("xpath", "//button[text() = 'Kontynuuj zakupy']").click()
 
+def add_to_chart_and_take_an_order():
+    driver.find_element("xpath", "//button[@data-button-action='add-to-cart']").click()
+    driver.find_element("xpath", "//a[contains(text(),'Przejdź do realizacji zamówienia')]").click()
+
 def select_quantity(number):
     driver.find_element("id", "quantity_wanted").click()
     driver.find_element("id", "quantity_wanted").send_keys(Keys.BACKSPACE)
@@ -34,6 +38,14 @@ def select_current_category(category):
 def select_size_and_material(size, material):
     driver.find_element("xpath", "//option[@title='" + size + "']").click()
     driver.find_element("xpath", "//input[@title='" + material + "']").click()
+
+def find_item_by_name(item_name):
+    driver.find_element("xpath", "//input[@placeholder='Szukaj w naszym katalogu']").click()
+    driver.find_element("xpath", "//input[@placeholder='Szukaj w naszym katalogu']").send_keys(str(item_name))
+    driver.find_element("xpath", "//input[@placeholder='Szukaj w naszym katalogu']").send_keys(Keys.ENTER)
+
+def choose_element(chosen_element):
+    driver.find_element("xpath", "//a[contains(text(), '" + str(chosen_element) + "')]").click()
 
 @pytest.fixture
 def test_setup():
@@ -112,14 +124,12 @@ def test_add_to_basket(test_setup):
     add_to_chart_and_continue_shopping()
 
 def test_find_by_name():
-    driver.find_element("xpath", "//input[@placeholder='Szukaj w naszym katalogu']").click()
-    driver.find_element("xpath", "//input[@placeholder='Szukaj w naszym katalogu']").send_keys("bluza")
-    driver.find_element("xpath", "//input[@placeholder='Szukaj w naszym katalogu']").send_keys(Keys.ENTER)
-    driver.find_element("xpath", "//a[@class='thumbnail product-thumbnail']").click()
-    driver.find_element("xpath", "//button[@data-button-action='add-to-cart']").click()
-    driver.find_element("xpath", "//a[contains(text(),'Przejdź do realizacji zamówienia')]").click()
+    find_item_by_name('bluza')
+    choose_element('Rozpinana bluza z kapturem')
+    add_to_chart_and_take_an_order()
 
 def test_delete_three_elements():
+    # //li.cart-item[descendant::a[text():contains]]//a[@data-link-action='delete-from-cart']
     driver.find_element("xpath", "//a[@data-link-action='delete-from-cart' and @data-id-product='111']").click()
     driver.find_element("xpath", "//a[@data-link-action='delete-from-cart' and @data-id-product='99']").click()
     driver.find_element("xpath", "//a[@data-link-action='delete-from-cart' and @data-id-product='98']").click()
