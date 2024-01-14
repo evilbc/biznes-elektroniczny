@@ -1,0 +1,57 @@
+version: '3'
+services:
+  mailcatcher:
+     image: maildev/maildev:2.1.0
+     networks:
+       - presta
+     deploy:
+      resources:
+        reservations:
+          cpus: "0.1"
+          memory: 10M
+        limits:
+          cpus: "0.3"
+          memory: 256M
+     ports:
+       - "18865:1080" # na tym porcie jest interfejs poczty po HTTP
+
+  prestashop:
+    image: niesytomichal/pg-weti-biznes-elektroniczny:latest
+    ports:
+      - 18427:443 # HTTP do przekierowania na HTTPS
+    environment:
+      PS_INSTALL_DB: 1 # instalacja bazy danych
+      PS_INSTALL_AUTO: 1
+      DB_SERVER: db
+      DB_NAME: BE_184276
+      DB_USER: root
+      DB_PASSWD: student
+      PS_DOMAIN: localhost
+      PS_LANGUAGE: pl
+      PS_COUNTRY: PL
+      ADMIN_MAIL: admin@example.com
+      ADMIN_PASSWD: admin
+      BIZ_DB_USE_DUMP: 1
+    networks:
+      - presta
+      - db
+    volumes:
+      - psdata:/var/www/html
+      - etc:/etc
+    deploy:
+      resources:
+        reservations:
+          cpus: "0.25"
+          memory: 128M
+        limits:
+          cpus: "0.5"
+          memory: 2048M
+
+networks:
+  presta:
+  db:
+    external: true
+    name: admin-mysql_default
+volumes:
+  psdata:
+  etc:
