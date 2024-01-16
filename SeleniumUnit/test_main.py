@@ -62,48 +62,48 @@ def test_add_to_basket(test_setup):
     driver.get("https://localhost/pl/2-strona-glowna")
 
     driver.find_element("xpath", "//a[contains(text(), 'Lifestyle')]").click()
-    select_by_name('Bawełniane spodenki Buffalo...')
+    select_by_name('Rozpinana bluza z kapturem')
     select_quantity(3)
     add_to_cart_and_continue_shopping()
 
     select_current_category('Lifestyle')
-    select_by_name('Spodnie dresowe męskie')
+    select_by_name('Torba bawełniana KEEZA')
     add_to_cart_and_continue_shopping()
 
     select_current_category('Lifestyle')
-    select_by_name('Skarpetki  lifestyle rowerki')
+    select_by_name('Torba bawełniana Kwiaty')
     select_quantity(2)
     add_to_cart_and_continue_shopping()
 
     select_current_category('Lifestyle')
-    select_by_name('Płaszcz zimowy Brugia')
+    select_by_name('Bluza bawełniana "e" Orange')
     add_to_cart_and_continue_shopping()
 
     select_current_category('Lifestyle')
-    select_by_name('Softshell damski taliowany...')
+    select_by_name('Bluza KEEZA Basic Bordo')
     select_quantity(4)
     add_to_cart_and_continue_shopping()
 
     select_current_category('Lifestyle')
-    select_by_name('Czapka i komin')
+    select_by_name('Bluza bawełniana Keeza...')
     add_to_cart_and_continue_shopping()
 
     select_current_category('Lifestyle')
-    select_by_name('Czapka z daszkiem KEEZA PINK')
+    select_by_name('Bluza KEEZA Basic Green')
     select_quantity(5)
     add_to_cart_and_continue_shopping()
 
     select_category('Odzież sportowa')
-    select_by_name('Krótkie spodenki Nesta')
+    select_by_name('Fartuch grillowy')
     add_to_cart_and_continue_shopping()
 
     select_current_category('Odzież sportowa')
-    select_by_name('Bluza sportowa z kapturem Hagi')
+    select_by_name('Plecak Napoli')
     select_quantity(3)
     add_to_cart_and_continue_shopping()
 
     select_current_category('Odzież sportowa')
-    select_by_name('Komplet termoaktywny z...')
+    select_by_name('Znacznik treningowy')
     add_to_cart_and_continue_shopping()
 
     select_category('Wyprzedaż')
@@ -123,13 +123,13 @@ def test_add_to_basket(test_setup):
 
 def test_find_by_name():
     find_item_by_name('bluza')
-    choose_element('Rozpinana bluza z kapturem')
+    choose_element('Bluza termoaktywna Lima')
     add_to_cart_and_take_an_order()
 
 def test_delete_three_elements():
-    delete_from_cart('Spodnie dresowe męskie')
-    delete_from_cart('Skarpetki  lifestyle rowerki')
-    delete_from_cart('Bluza sportowa z kapturem Hagi')
+    delete_from_cart('Torba bawełniana Kwiaty')
+    delete_from_cart('Torba bawełniana KEEZA')
+    delete_from_cart('Rozpinana bluza z kapturem')
 
 def test_register_new_account():
     driver.find_element("xpath", "//span[contains(text(),'Zaloguj się')]").click()
@@ -138,7 +138,7 @@ def test_register_new_account():
     driver.find_element("id", "field-firstname").send_keys("Jan")
     driver.find_element("id", "field-lastname").send_keys("Kowalski")
     rn = random.randint(0, 10000000000)
-    driver.find_element("id", "field-email").send_keys(str(rn) + "@gmail.com")
+    driver.find_element("id", "field-email").send_keys(str(rn) + "@example.com")
     driver.find_element("id", "field-password").send_keys("qwerty")
     driver.find_element("id", "field-birthday").send_keys("1970-01-01")
     driver.find_element("xpath", "//input[@type='checkbox' and @name='optin']").click()
