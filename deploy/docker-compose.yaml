@@ -15,8 +15,24 @@ services:
      ports:
        - "18865:1080" # na tym porcie jest interfejs poczty po HTTP
 
+  memcached:
+    image: memcached:1.6.23-alpine
+    command:
+      - "-m"
+      - "64"
+    networks:
+      - presta
+    deploy:
+      resources:
+        reservations:
+          cpus: "0.1"
+          memory: 100M
+        limits:
+          cpus: "0.3"
+          memory: 100M
+
   prestashop:
-    image: niesytomichal/pg-weti-biznes-elektroniczny:latest
+    image: niesytomichal/pg-weti-biznes-elektroniczny:2
     ports:
       - 18427:443 # HTTP do przekierowania na HTTPS
     environment:
