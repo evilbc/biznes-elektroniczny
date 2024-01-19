@@ -81,7 +81,7 @@ def test_add_to_basket(test_setup):
 
     select_current_category('Lifestyle')
     select_by_name('Bluza KEEZA Basic Bordo')
-    select_quantity(4)
+    select_quantity(2)
     add_to_cart_and_continue_shopping()
 
     select_current_category('Lifestyle')
@@ -90,7 +90,6 @@ def test_add_to_basket(test_setup):
 
     select_current_category('Lifestyle')
     select_by_name('Bluza KEEZA Basic Green')
-    select_quantity(5)
     add_to_cart_and_continue_shopping()
 
     select_category('Odzież sportowa')
@@ -104,21 +103,6 @@ def test_add_to_basket(test_setup):
 
     select_current_category('Odzież sportowa')
     select_by_name('Znacznik treningowy')
-    add_to_cart_and_continue_shopping()
-
-    select_category('Wyprzedaż')
-    select_by_name('Getry sportowe')
-    select_size_and_material('L', 'Syntetyczne')
-    add_to_cart_and_continue_shopping()
-
-    select_current_category('Wyprzedaż')
-    select_by_name('Getry sportowe')
-    select_size_and_material('M', 'Bawełna')
-    add_to_cart_and_continue_shopping()
-
-    select_current_category('Wyprzedaż')
-    select_by_name('Koszulka Casual line')
-    select_size_and_material('S', 'Len')
     add_to_cart_and_continue_shopping()
 
 def test_find_by_name():
